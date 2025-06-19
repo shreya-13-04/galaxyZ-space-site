@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard - GalaxyZ Space</title>
+  <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    .dashboard-wrapper {
+      max-width: 1000px;
+      margin: 4rem auto;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      color: var(--text);
+    }
+
+    .dashboard-title {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      font-weight: bold;
+    }
+
+    .dashboard-nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .dashboard-nav a {
+      text-decoration: none;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .dashboard-nav a:hover {
+      background-color: var(--accent);
+      color: white;
+    }
+
+    .dashboard-section {
+      margin-top: 2rem;
+    }
+
+    .dashboard-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.5rem;
+    }
+
+    .dashboard-section ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .dashboard-section li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .logo-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 60px;
+    }
+    .logo-wrapper img {
+      max-width: 150px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Effects -->
+  <div class="space-background">
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    <div class="shooting-stars"></div>
+    <div class="nebula"></div>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo-wrapper" style="margin-top: 30px;">
+    <a href="{% url 'home' %}"><img src="{% static 'assets/frontmoving.png' %}" alt="Logo" /></a>
+  </div>
+
+  <div class="dashboard-wrapper">
+  <div class="dashboard-title">Welcome, {{ user.username }}</div>
+
+  <div class="dashboard-nav">
+    <a href="#" onclick="showSection('personal')">Personal Details</a>
+    <a href="#" onclick="showSection('courses')">Your Courses</a>
+    <a href="{% url 'logout' %}">Logout</a>
+    {% if user.is_superuser %}
+    <a href="#" onclick="showSection('admin-tools')">Admin Panel</a>
+    {% endif %}
+  </div>
+
+  <div class="dashboard-section" id="personal">
+    <h3>👤 Personal Details</h3>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Superuser:</strong> {{ user.is_superuser|yesno:"Yes,No" }}</p>
+  </div>
+
+  <div class="dashboard-section" id="courses" style="display:none;">
+    <h3>📚 Your Courses</h3>
+    {% if user_courses %}
+      <ul>
+        {% for enrolled in user_courses %}
+          <li>{{ enrolled.course.title }} (Enrolled on {{ enrolled.enrolled_on|date:"M d, Y" }})</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>You have not enrolled in any courses yet.</p>
+    {% endif %}
+  </div>
+
+  {% if user.is_superuser %}
+  <div class="dashboard-section" id="admin-tools" style="display:none;">
+    <h3>🛠️ Admin Options</h3>
+    <ul>
+      <li><a href="{% url 'add_course' %}">Add New Course</a></li>
+      <li><a href="{% url 'manage_users' %}">Manage Users</a></li>
+      <li><a href="{% url 'view_registrations' %}">View Workshop Registrations</a></li>
+    </ul>
+  </div>
+  {% endif %}
+</div>
+
+<script>
+  function showSection(id) {
+    const sections = document.querySelectorAll('.dashboard-section');
+    sections.forEach(section => section.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+  }
+
+  // Show 'personal' section by default
+  document.addEventListener("DOMContentLoaded", () => {
+    showSection('personal');
+  });
+</script>
+</body>
+</html>

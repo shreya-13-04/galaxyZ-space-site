@@ -30,15 +30,10 @@
     <li><a href="#testimonials"><span class="nav-link-text">Testimonials</span></a></li>
     <li><a href="#registration"><span class="nav-link-text">Register</span></a></li>
     <li><a href="#contact"><span class="nav-link-text">Contact</span></a></li>
-
-    {% if user.is_authenticated and user.is_superuser %}
-    <li>
-        <a href="{% url 'admin-panel' %}" class="btn btn-admin">Admin Panel</a>
-    </li>
-    {% endif %}
 </ul>
 {% if user.is_authenticated %}
     <a href="{% url 'logout' %}" class="btn btn-glow">Logout</a>
+    <a href="{% url 'dashboard' %}" class="btn btn-glow">Profile</a>
 {% else %}
     <a href="{% url 'login' %}" class="btn btn-glow">Login</a>
 {% endif %}

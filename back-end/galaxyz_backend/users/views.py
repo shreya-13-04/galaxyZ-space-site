@@ -4,8 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 
+@login_required
 def dashboard(request):
     return render(request, 'users/dashboard.html')
+
 # Render register page and handle POST request
 def register_view(request):
     if request.method == 'POST':
@@ -48,9 +50,3 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
-
-@login_required
-@user_passes_test(lambda u: u.is_superuser)
-def admin_panel(request):
-    users = User.objects.all()
-    return render(request, 'users/admin_panel.html', {'users': users})
