@@ -82,7 +82,9 @@
     <h2>Login</h2>
 {% if messages %}
   {% for message in messages %}
-    <p style="color: red; text-align:center;">{{ message }}</p>
+    <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align:center;">
+      {{ message }}
+    </p>
   {% endfor %}
 {% endif %}
 
