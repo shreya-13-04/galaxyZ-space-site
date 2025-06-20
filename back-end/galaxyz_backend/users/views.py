@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Course
+from django.shortcuts import get_object_or_404
 
 @login_required
 def dashboard(request):
@@ -56,7 +57,7 @@ def logout_view(request):
 def add_course(request):
     if request.method == 'POST':
         course_name = request.POST.get('course_name')
-        course_description = request.POST.get('course_description')
+        course_description = request.POST.get('description')
         instructor = request.POST.get('instructor')
         price = request.POST.get('price')
         # Here you would typically save the course to the database
@@ -67,6 +68,42 @@ def add_course(request):
             price=price
         )
         messages.success(request, f'Course "{course_name}" added successfully!')
-        return redirect('dashboard')
 
     return render(request, 'users/add_course.html')
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def manage_courses(request):
+    courses = Course.objects.all()
+    return render(request, 'users/manage_courses.html', {'courses': courses})
+
+
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def edit_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        price = request.POST.get('price')
+        instructor = request.POST.get('instructor')
+        if instructor:
+            course.instructor = instructor
+        if title:
+            course.title = title
+        if description:
+            course.description = description
+        if price:
+            course.price = price
+
+        course.save()
+        return redirect('manage_courses')
+    return render(request, 'users/edit_course.html', {'course': course})
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def delete_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    course.delete()
+    return redirect('manage_courses')

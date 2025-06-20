@@ -87,7 +87,7 @@
       <a href="{% url 'home' %}"><img src="{% static 'assets/frontmoving.png' %}" alt="Logo" /></a>
     </div>
   <div class="form-container">
-    <h2>Add New Course</h2>
+    <h2>Edit Course</h2>
     {% if messages %}
   {% for message in messages %}
     <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align:center;">
@@ -96,13 +96,23 @@
   {% endfor %}
 {% endif %}
     <form method="POST">
-      {% csrf_token %}
-      <input type="text" name="course_name" placeholder="Course Title" required />
-      <textarea name="description" placeholder="Course Description" rows="4" required></textarea>
-      <input type="text" name="instructor" placeholder="Instructor Name" required />
-      <input type="number" name="price" placeholder="Price (₹)" required />
-      <button type="submit">Add Course</button>
-    </form>
+  {% csrf_token %}
+
+  <label>Title</label>
+  <input type="text" name="title" value="{{ course.title }}" />
+
+  <label>Description</label>
+  <textarea name="description">{{ course.description }}</textarea>
+
+  <label>Price</label>
+  <input type="number" name="price" value="{{ course.price }}" step="0.01" />
+
+  <label>Instructor</label>
+  <input type="text" name="instructor" value="{{ course.instructor }}" />
+
+  <button type="submit">Save Changes</button>
+</form>
+
   </div>
 </body>
 </html>

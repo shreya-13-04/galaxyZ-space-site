@@ -52,6 +52,7 @@
 
     .dashboard-section {
       margin-top: 2rem;
+
     }
 
     .dashboard-section h3 {
@@ -64,11 +65,24 @@
     .dashboard-section ul {
       list-style-type: none;
       padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
     }
 
     .dashboard-section li {
       padding: 0.5rem 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .dashboard-section a{
+      text-decoration: none;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      transition: background 0.3s ease;
     }
     .logo-wrapper {
       width: 100%;
@@ -129,12 +143,12 @@
   </div>
 
   {% if user.is_superuser %}
-  <div class="dashboard-section" id="admin-tools" style="display:none;">
+  <div class="dashboard-section" id="admin-tools">
     <h3>🛠️ Admin Options</h3>
     <ul>
       <li><a href="{% url 'add_course' %}">Add New Course</a></li>
-      <li><a href="{% url 'manage_users' %}">Manage Users</a></li>
-      <li><a href="{% url 'view_registrations' %}">View Workshop Registrations</a></li>
+      <li><a href="{% url 'manage_courses' %}">Manage Courses</a></li>
+      <li><a href="{% url 'add_course' %}">Manage Blog</a></li>
     </ul>
   </div>
   {% endif %}
