@@ -1,14 +1,14 @@
-<!DOCTYPE html>
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Manage Courses - GalaxyZ Space</title>
+  <title>Manage Workshops - GalaxyZ Space</title>
   <link rel="stylesheet" href="{% static 'styles/main.css' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    .course-container {
+    .workshop-container {
       max-width: 900px;
       margin: 4rem auto;
       background: rgba(255, 255, 255, 0.05);
@@ -17,7 +17,7 @@
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
     }
-    .course-card {
+    .workshop-card {
       background: rgba(255, 255, 255, 0.08);
       padding: 1.5rem;
       margin-bottom: 1.2rem;
@@ -25,15 +25,15 @@
       cursor: pointer;
       transition: 0.3s;
     }
-    .course-card:hover {
+    .workshop-card:hover {
       background: rgba(255, 255, 255, 0.15);
     }
-    .course-details {
+    .workshop-details {
       display: none;
       margin-top: 1rem;
       color: #fff;
     }
-    .course-title {
+    .workshop-title {
       font-size: 1.4rem;
       font-weight: bold;
       color: #fff;
@@ -71,8 +71,8 @@
       <a href="{% url 'home' %}"><img src="{% static 'assets/frontmoving.png' %}" alt="Logo" /></a>
     </div>
 
-  <div class="course-container">
-    <h2 style="text-align: center; color: #fff; margin-bottom: 2rem;">🪐 Manage Courses</h2>
+  <div class="workshop-container">
+    <h2 style="text-align: center; color: #fff; margin-bottom: 2rem;">🪐 Manage workshops</h2>
         {% if messages %}
     {% for message in messages %}
       <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align:center;">
@@ -80,30 +80,31 @@
       </p>
     {% endfor %}
     {% endif %}
-{% for course in courses %}
-  <div class="course-card" onclick="toggleDetails('{{ course.id }}')">
-    <div class="course-title">{{ course.title }}</div>
+{% for workshop in workshops %}
+  <div class="workshop-card" onclick="toggleDetails('{{ workshop.id }}')">
+    <div class="workshop-title">{{ workshop.title }}</div>
 
-    <div id="details-{{ course.id }}" class="course-details">
-      <img src="{{ course.poster.url }}" class="poster" alt="Poster for {{ course.title }}" />
-      <p><span class="label">Description:</span> {{ course.description }}</p>
-      <p><span class="label">Instructor:</span> {{ course.instructor }}</p>
-      <p><span class="label">Price:</span> ₹{{ course.price }}</p>
-      <p><span class="label">Created:</span> {{ course.created_at|date:"M d, Y" }}</p>
-      <p><span class="label">Students Enrolled:</span> {{ course.enrollment_set.count }}</p>
-      {% if course.pdf %}
-      <p style="color:white;">Current PDF: <a href="{{ course.pdf.url }}" target="_blank" style="color:lightblue;">View</a></p>
-      {% endif %}
+    <div id="details-{{ workshop.id }}" class="workshop-details">
+      <img src="{{ workshop.poster.url }}" class="poster" alt="Poster for {{ workshop.title }}" />
+      <p><span class="label">Description:</span> {{ workshop.description }}</p>
+      <p><span class="label">Instructor:</span> {{ workshop.instructor }}</p>
+      <p><span class="label">Price:</span> ₹{{ workshop.price }}</p>
+      <p><span class="label">Date:</span> {{ workshop.date|date:"M d, Y" }}</p>
+      <p><span class="label">Time:</span> {{ workshop.time|date:"H:i A" }}</p>
+      <p><span class="label">Duration (in hours):</span> {{ workshop.duration }} hours</p>
+      <p><span class="label">Meet Link:</span> <a href="{{ workshop.meetLink }}" target="_blank" style="color:lightblue;">Join</a></p>
+      <p><span class="label">Registered Participants:</span> {{ workshop.registeredParticipants }}</p>
+      <p><span class="label">Created:</span> {{ workshop.created_at|date:"M d, Y" }}</p>
 
 
       <div style="margin-top: 1rem;">
-        <a href="{% url 'edit_course' course.id %}" class="btn btn-glow" style="margin-right: 10px;">✏️ Edit</a>
-        <a href="{% url 'delete_course' course.id %}" class="btn btn-glow" style="background: #ff4d4d;" onclick="return confirm('Are you sure you want to delete this course?');">🗑️ Delete</a>
+        <a href="{% url 'edit_workshop' workshop.id %}" class="btn btn-glow" style="margin-right: 10px;">✏️ Edit</a>
+        <a href="{% url 'delete_workshop' workshop.id %}" class="btn btn-glow" style="background: #ff4d4d;" onclick="return confirm('Are you sure you want to delete this workshop?');">🗑️ Delete</a>
       </div>
     </div>
   </div>
 {% empty %}
-  <p style="text-align: center; color: #ccc;">No courses available.</p>
+  <p style="text-align: center; color: #ccc;">No workshops available.</p>
 {% endfor %}
 
   </div>

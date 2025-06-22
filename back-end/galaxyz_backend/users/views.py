@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Course
+from .models import Course, Workshop
 from django.shortcuts import get_object_or_404
+from datetime import timedelta,datetime
 
 @login_required
 def dashboard(request):
@@ -78,11 +79,54 @@ def add_course(request):
     return render(request, 'users/add_course.html')
 
 @login_required
+def add_workshop(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        price = request.POST.get('price')
+        date = request.POST.get('date')
+        time = request.POST.get('time')
+        duration = request.POST.get('duration')
+        meetLink = request.POST.get('meetLink')
+        instructor = request.POST.get('instructor')
+        poster = request.FILES.get('poster')
+
+        try:
+            date_obj = datetime.strptime(date, "%Y-%m-%d")
+            time_obj = datetime.strptime(time, "%H:%M").time()
+            duration_float = float(duration)  # ← Accept 1.5 etc
+            duration_obj = timedelta(hours=duration_float)
+        except ValueError:
+            messages.error(request, "Invalid date or duration format.")
+            return render(request, 'users/add_workshop.html')
+
+        # Here you would typically save the workshop to the database
+        Workshop.objects.create(
+            title=title,
+            description=description,
+            price=price,
+            date=date_obj,
+            time=time_obj,
+            duration=duration_obj,
+            meetLink=meetLink,
+            instructor=instructor,
+            poster=poster
+        )
+        messages.success(request, f'Workshop "{title}" added successfully!')
+
+    return render(request, 'users/add_workshop.html')
+
+@login_required
 @user_passes_test(lambda u: u.is_superuser)
 def manage_courses(request):
     courses = Course.objects.all()
     return render(request, 'users/manage_courses.html', {'courses': courses})
 
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def manage_workshops(request):
+    workshops = Workshop.objects.all()
+    return render(request, 'users/manage_workshops.html', {'workshops': workshops})
 
 
 @login_required
@@ -110,6 +154,7 @@ def edit_course(request, course_id):
             course.pdf = pdf 
 
         course.save()
+        messages.success(request, f'Course "{course.title}" updated successfully!')
         return redirect('manage_courses')
     return render(request, 'users/edit_course.html', {'course': course})
 
@@ -119,3 +164,46 @@ def delete_course(request, course_id):
     course = get_object_or_404(Course, id=course_id)
     course.delete()
     return redirect('manage_courses')
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def edit_workshop(request, workshop_id):
+    workshop = get_object_or_404(Workshop, id=workshop_id)
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        price = request.POST.get('price')
+        instructor = request.POST.get('instructor')
+        poster = request.FILES.get('poster')
+        dateAndTime = request.POST.get('dateAndTime')
+        duration = request.POST.get('duration')
+        meetLink = request.POST.get('meetLink')
+        if instructor:
+            workshop.instructor = instructor
+        if title:
+            workshop.title = title
+        if description:
+            workshop.description = description
+        if price:
+            workshop.price = price
+        if poster:
+            workshop.poster = poster
+        if dateAndTime:
+            workshop.dateAndTime = dateAndTime
+        if duration:
+            workshop.duration = duration
+        if meetLink:
+            workshop.meetLink = meetLink
+
+        workshop.save()
+        messages.success(request, f'Workshop "{workshop.title}" updated successfully!')
+        return redirect('manage_workshops')
+    return render(request, 'users/edit_workshop.html', {'workshop': workshop})
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def delete_workshop(request, workshop_id):
+    workshop = get_object_or_404(Workshop, id=workshop_id)
+    workshop.delete()
+    messages.success(request, f'Workshop "{workshop.title}" deleted successfully!')
+    return redirect('manage_workshops')
