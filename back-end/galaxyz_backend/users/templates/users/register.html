@@ -81,14 +81,13 @@
   <!-- Registration Form -->
   <div class="form-container">
     <h2>Register</h2>
-{% if messages %}
-  {% for message in messages %}
-    <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align:center;">
-      {{ message }}
-    </p>
-  {% endfor %}
-{% endif %}
-
+    {% if messages %}
+      {% for message in messages %}
+        <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align:center;">
+          {{ message }}
+        </p>
+      {% endfor %}
+    {% endif %}
     <form method="POST" action="{% url 'register' %}">
       {% csrf_token %}
       <input type="text" name="username" placeholder="Username" required />

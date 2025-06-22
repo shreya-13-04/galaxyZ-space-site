@@ -84,6 +84,10 @@
       <p><span class="label">Price:</span> ₹{{ course.price }}</p>
       <p><span class="label">Created:</span> {{ course.created_at|date:"M d, Y" }}</p>
       <p><span class="label">Students Enrolled:</span> {{ course.enrollment_set.count }}</p>
+      {% if course.pdf %}
+      <p style="color:white;">Current PDF: <a href="{{ course.pdf.url }}" target="_blank" style="color:lightblue;">View</a></p>
+      {% endif %}
+
 
       <div style="margin-top: 1rem;">
         <a href="{% url 'edit_course' course.id %}" class="btn btn-glow" style="margin-right: 10px;">✏️ Edit</a>

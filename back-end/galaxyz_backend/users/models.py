@@ -9,6 +9,8 @@ class Course(models.Model):
     numberOfRegisteredUsers = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     poster = models.ImageField(upload_to='course_posters/', null=True, blank=True)
+    pdf = models.FileField(upload_to='pdfs/', blank=True, null=True)
+    courseVideoLink = models.URLField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -21,7 +23,7 @@ class Workshop(models.Model):
     date = models.DateTimeField()
     time = models.TimeField()
     duration = models.DurationField()
-    link = models.URLField(max_length=200, null=True, blank=True)
+    meetLink = models.URLField(max_length=200, null=True, blank=True)
     instructor = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     poster = models.ImageField(upload_to='workshop_posters/', null=True, blank=True)

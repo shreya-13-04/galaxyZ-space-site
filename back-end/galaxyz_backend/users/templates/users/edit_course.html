@@ -88,13 +88,14 @@
     </div>
   <div class="form-container">
     <h2>Edit Course</h2>
+    <p>Leave fields unchanged to make no changes</p>
     {% if messages %}
-  {% for message in messages %}
-    <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align:center;">
-      {{ message }}
-    </p>
-  {% endfor %}
-{% endif %}
+    {% for message in messages %}
+      <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align:center;">
+        {{ message }}
+      </p>
+    {% endfor %}
+    {% endif %}
     <form method="POST">
   {% csrf_token %}
 
@@ -110,11 +111,18 @@
   <label>Instructor</label>
   <input type="text" name="instructor" value="{{ course.instructor }}" />
 
+  <input type="text" name="courseVideoLink" value="{{ course.courseVideoLink }}"/>
+
   <label style="color:white;">Current Poster:</label><br>
   <img src="{{ course.poster.url }}" alt="Course Poster" style="max-width: 200px; border-radius: 8px; margin-bottom: 1rem;"><br>
   
   <label style="color:white;">Upload New Poster (JPG/PNG):</label>
-  <input type="file" name="poster" accept="image/*" />  
+  <input type="file" name="poster" accept="image/*" />
+  
+  <label >Current Course Material (PDF): <a href="{{ course.pdf.url }}" target="_blank" style="color:lightblue;">View</a></label><br>
+  <br>
+  <label style="color:white;">Upload New Course Material (PDF):</label>
+  <input type="file" name="pdf" accept="application/pdf" />
 
   <button type="submit">Save Changes</button>
 </form>
