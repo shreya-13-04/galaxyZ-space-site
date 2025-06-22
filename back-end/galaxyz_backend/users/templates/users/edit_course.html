@@ -110,9 +110,14 @@
   <label>Instructor</label>
   <input type="text" name="instructor" value="{{ course.instructor }}" />
 
+  <label style="color:white;">Current Poster:</label><br>
+  <img src="{{ course.poster.url }}" alt="Course Poster" style="max-width: 200px; border-radius: 8px; margin-bottom: 1rem;"><br>
+  
+  <label style="color:white;">Upload New Poster (JPG/PNG):</label>
+  <input type="file" name="poster" accept="image/*" />  
+
   <button type="submit">Save Changes</button>
 </form>
-
   </div>
 </body>
 </html>

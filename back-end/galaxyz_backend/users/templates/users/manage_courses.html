@@ -51,6 +51,12 @@
       max-width: 150px;
       height: auto;
     }
+    .poster {
+      max-width: 50%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -72,6 +78,7 @@
     <div class="course-title">{{ course.title }}</div>
 
     <div id="details-{{ course.id }}" class="course-details">
+      <img src="{{ course.poster.url }}" class="poster" alt="Poster for {{ course.title }}" />
       <p><span class="label">Description:</span> {{ course.description }}</p>
       <p><span class="label">Instructor:</span> {{ course.instructor }}</p>
       <p><span class="label">Price:</span> ₹{{ course.price }}</p>

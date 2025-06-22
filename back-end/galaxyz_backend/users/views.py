@@ -60,12 +60,14 @@ def add_course(request):
         course_description = request.POST.get('description')
         instructor = request.POST.get('instructor')
         price = request.POST.get('price')
+        poster = request.FILES.get('poster')
         # Here you would typically save the course to the database
         Course.objects.create(
             title=course_name,
             description=course_description,
             instructor=instructor,
-            price=price
+            price=price,
+            poster=poster
         )
         messages.success(request, f'Course "{course_name}" added successfully!')
 
@@ -88,6 +90,7 @@ def edit_course(request, course_id):
         description = request.POST.get('description')
         price = request.POST.get('price')
         instructor = request.POST.get('instructor')
+        poster = request.FILES.get('poster')
         if instructor:
             course.instructor = instructor
         if title:
@@ -96,6 +99,8 @@ def edit_course(request, course_id):
             course.description = description
         if price:
             course.price = price
+        if poster:
+            course.poster = poster
 
         course.save()
         return redirect('manage_courses')
