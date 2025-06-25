@@ -207,3 +207,20 @@ def delete_workshop(request, workshop_id):
     workshop.delete()
     messages.success(request, f'Workshop "{workshop.title}" deleted successfully!')
     return redirect('manage_workshops')
+
+def workshop_detail(request, workshop_id):
+    workshop = get_object_or_404(Workshop, id=workshop_id)
+    testimonials = [
+        {'text': 'A mind-blowing session! I had no idea AI was used in black hole simulations. Absolutely loved it!',
+         'author': 'Aarav Menon, Astrophysics Student'},
+        {'text': 'The instructor was phenomenal. She connected deep science with AI in such a simple way!',
+         'author': 'Meera R., AI Research Intern'},
+        {'text': 'I came for space, stayed for AI! Truly a cosmic combo. Can’t wait for the next workshop.',
+         'author': 'Tanmay Kapoor, Tech Enthusiast'},
+    ]
+
+    return render(request, 'users/workshop.html', {
+        'workshop': workshop,
+        'testimonials': testimonials
+    })
+

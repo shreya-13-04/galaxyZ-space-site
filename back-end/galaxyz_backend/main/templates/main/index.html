@@ -11,6 +11,32 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .workshop-carousel-wrapper {
+        position: relative;
+        overflow: hidden;
+        max-width: 100%;
+        }
+
+        .workshop-carousel {
+        display: flex;
+        transition: transform 0.5s ease;
+        width: fit-content;
+        }
+
+        .card {
+        flex: 0 0 33.33%; /* Show 3 per view */
+        box-sizing: border-box;
+        margin: 0 10px;
+        }
+
+        .workshop-nav {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        }
+</style>
 </head>
 <body>
     <div class="space-background">
@@ -86,101 +112,91 @@
             </div>
         </section>
         
-        <section id="workshops" class="section bg-dark">
-            <div class="section-header">
-                <h2 class="section-title">Our <span class="text-gradient">Workshops</span></h2>
-                <p class="section-subtitle">Discover our range of educational programs designed to ignite your passion for space</p>
-            </div>
-            <div class="cards">
-                <article class="card card-hover">
-                    <div class="card-img-container">
-                        <img src="{% static 'assets/workshop1.jpg' %}" alt="Children exploring space concepts" class="card-img" loading="lazy">
-                        <div class="card-img-overlay"></div>
-                    </div>
-                    <div class="card-content">
-                        <h3>The Science Behind Interstellar</h3>
-                        <p>Fact Or Fiction?  Dive into blackholes,wormholes,time dilation,Space-time & more..</p>
-                        <div class="card-footer">
-                            <div style="font-size: 24px; font-weight: bold; color: #4FFF70;">
-                            <span style="text-decoration: line-through; margin-right: 4px;">₹299</span><span>FREE</span>
-                            </div>
+         <section id="workshops" class="section bg-dark">
+  <div class="section-header">
+    <h2 class="section-title">Our <span class="text-gradient">Workshops</span></h2>
+    <p class="section-subtitle">Discover our range of educational programs designed to ignite your passion for space</p>
+  </div>
 
-                            
-
-                            
-                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeFMQDTDnukjmtrqLIINX1FLuteQAoRFBkGFvn5beXUZU1StA/viewform?usp=send_form" class="btn btn-glow" target="_blank" rel="noopener noreferrer">Register</a>
-                        </div>
-                    </div>
-                </article>
-                <article class="card card-hover">
-                    <div class="card-img-container">
-                        <img src="{% static 'assets/rocket-science.jpg' %}" alt="Rocket model being built" class="card-img" loading="lazy">
-                        <div class="card-img-overlay"></div>
-                    </div>
-                    <div class="card-content">
-                        <h3>Upcoming Workshop</h3>
-                        <p>Learn about propulsion, orbital mechanics, and spacecraft design through interactive simulations and model building.</p>
-                        <div class="card-footer">
-                            <span class="price">₹299</span>
-                            <!-- <a href="#registration" class="btn btn-glow">Register</a> -->
-                        </div>
-                    </div>
-                </article>
-                <article class="card card-hover">
-                    <div class="card-img-container">
-                        <img src="{% static 'assets/interstellar-physics.jpg' %}" alt="Visualization of black hole physics" class="card-img" loading="lazy">
-                        <div class="card-img-overlay"></div>
-                    </div>
-                    <div class="card-content">
-                        <h3>Upcoming Workshop 2</h3>
-                        <p>Yet to be announced</p>
-                        <div class="card-footer">
-                            <!-- <span class="price">₹299</span> -->
-                            <!-- <a href="#registration" class="btn btn-glow">Register</a> -->
-                        </div>
-                    </div>
-                </article>
+  <div class="workshop-carousel-wrapper">
+    <div class="workshop-carousel" id="workshop-track">
+      {% for workshop in workshops %}
+      <article class="card card-hover">
+        <div class="card-img-container">
+          <img src="{{ workshop.poster.url }}" alt="{{ workshop.title }}" class="card-img" loading="lazy">
+          <div class="card-img-overlay"></div>
+        </div>
+        <div class="card-content">
+          <h3>{{ workshop.title }}</h3>
+          <p>{{ workshop.description|truncatewords:15 }}</p>
+          <div class="card-footer">
+            <div style="font-size: 20px; font-weight: bold; color: #4FFF70;">
+              {% if workshop.price == 0 %}
+                <span style="text-decoration: line-through;">₹299</span> FREE
+              {% else %}
+                ₹{{ workshop.price }}
+              {% endif %}
             </div>
-        </section>
+            <a href="{% url 'workshop_detail' workshop.id %}" class="btn btn-glow" target="_blank">Register</a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    <div class="workshop-nav">
+      <button class="testimonial-nav-btn" onclick="prevWorkshop()"><i class="fas fa-chevron-left"></i></button>
+      <button class="testimonial-nav-btn" onclick="nextWorkshop()"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+</section>
         
         <section id="testimonials" class="section bg-primary">
-            <div class="section-header">
-                <h2 class="section-title">What Our <span class="text-gradient">CEO</span> Say</h2>
-                <p class="section-subtitle">A Message From Our Founder</p>
-            </div>
-            <div class="testimonial-container">
-                <div class="testimonial-track">
-                    <blockquote class="testimonial">
-                        <div class="testimonial-quote">
-                            <i class="fas fa-quote-left"></i>
-                            <p class="testimonial-text">Welcome to GalaxyZ Space. We aim to make space and cutting-edge technology accessible for all, fostering a community driven by curiosity, learning, and innovation.Thank you for being a part of this journey towards the future of space and technology.</p>
-                            <i class="fas fa-quote-right"></i>
-                        </div>
-                        <footer class="testimonial-author">- Vishal SK, Founder & Cheif Explorer</footer>
-                    </blockquote>
-                    <blockquote class="testimonial">
-                        <div class="testimonial-quote">
-                            <i class="fas fa-quote-left"></i>
-                            <p class="testimonial-text">My 12-year-old son was completely captivated by the Cosmic Explorers workshop. The instructors made complex concepts accessible and fun.</p>
-                            <i class="fas fa-quote-right"></i>
-                        </div>
-                        <footer class="testimonial-author">- Michael Chen, Parent</footer>
-                    </blockquote>
-                    <blockquote class="testimonial">
-                        <div class="testimonial-quote">
-                            <i class="fas fa-quote-left"></i>
-                            <p class="testimonial-text">As a science teacher, I found GalaxyZ's workshops to be an invaluable resource that has enhanced my classroom teaching tremendously.</p>
-                            <i class="fas fa-quote-right"></i>
-                        </div>
-                        <footer class="testimonial-author">- Dr. Emily Rodriguez, High School Teacher</footer>
-                    </blockquote>
+        <div class="section-header">
+            <h2 class="section-title">What Our <span class="text-gradient">CEO</span> Say</h2>
+            <p class="section-subtitle">A Message From Our Founder</p>
+        </div>
+
+        <div class="testimonial-container">
+            <div class="testimonial-track" id="testimonial-track">
+            <blockquote class="testimonial">
+                <div class="testimonial-quote">
+                <i class="fas fa-quote-left"></i>
+                <br>
+                <p class="testimonial-text">Welcome to GalaxyZ Space. We aim to make space and cutting-edge technology accessible for all, fostering a community driven by curiosity, learning, and innovation. Thank you for being a part of this journey towards the future of space and technology.</p>
+                <i class="fas fa-quote-right"></i>
                 </div>
-                <div class="testimonial-nav">
-                    <button class="testimonial-nav-btn prev"><i class="fas fa-chevron-left"></i></button>
-                    <button class="testimonial-nav-btn next"><i class="fas fa-chevron-right"></i></button>
+                <footer class="testimonial-author">- Vishal SK, Founder & Chief Explorer</footer>
+            </blockquote>
+
+            <blockquote class="testimonial">
+                <div class="testimonial-quote">
+                <i class="fas fa-quote-left"></i>
+                <br>
+                <p class="testimonial-text">My 12-year-old son was completely captivated by the Cosmic Explorers workshop. The instructors made complex concepts accessible and fun.</p>
+                <i class="fas fa-quote-right"></i>
                 </div>
+                <footer class="testimonial-author">- Michael Chen, Parent</footer>
+            </blockquote>
+
+            <blockquote class="testimonial">
+                <div class="testimonial-quote">
+                <i class="fas fa-quote-left"></i>
+                <br>
+                <p class="testimonial-text">As a science teacher, I found GalaxyZ's workshops to be an invaluable resource that has enhanced my classroom teaching tremendously.</p>
+                <i class="fas fa-quote-right"></i>
+                </div>
+                <footer class="testimonial-author">- Dr. Emily Rodriguez, High School Teacher</footer>
+            </blockquote>
             </div>
+
+            <div class="testimonial-nav">
+            <button class="testimonial-nav-btn" onclick="prevTestimonial()"><i class="fas fa-chevron-left"></i></button>
+            <button class="testimonial-nav-btn" onclick="nextTestimonial()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
         </section>
+
         
         <section id="registration" class="section bg-dark">
             <div class="section-header">
@@ -324,9 +340,51 @@
     <p>Made with <span class="heart">❤️</span> for space explorers</p>
   </div>
 </footer>
-
-
-    
-    <script src="scripts/main.js"></script>
 </body>
 </html>
+
+<script>
+  let currentTestimonial = 0;
+  const track = document.getElementById('testimonial-track');
+  const testimonials = document.querySelectorAll('.testimonial');
+
+  function updateSlider() {
+    track.style.transform = `translateX(-${currentTestimonial * 100}%)`;
+  }
+
+  function nextTestimonial() {
+    currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+    updateSlider();
+  }
+
+  function prevTestimonial() {
+    currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+    updateSlider();
+  }
+</script>
+<script>
+  let workshopIndex = 0;
+  const workshopTrack = document.getElementById('workshop-track');
+  const cards = document.querySelectorAll('#workshop-track .card');
+  const cardsPerPage = 3;
+  const totalPages = Math.ceil(cards.length / cardsPerPage);
+
+  function updateWorkshopSlider() {
+    workshopTrack.style.transform = `translateX(-${workshopIndex * 100}%)`;
+  }
+
+  function nextWorkshop() {
+    if (workshopIndex < totalPages - 1) {
+      workshopIndex++;
+      updateWorkshopSlider();
+    }
+  }
+
+  function prevWorkshop() {
+    if (workshopIndex > 0) {
+      workshopIndex--;
+      updateWorkshopSlider();
+    }
+  }
+</script>
+
