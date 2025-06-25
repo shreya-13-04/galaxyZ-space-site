@@ -30,11 +30,19 @@ class Workshop(models.Model):
 
     def __str__(self):
         return self.title
-    
-class Enrollment(models.Model):
+
+class CourseEnrollment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     enrolled_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username} → {self.course.title}"
+
+class WorkshopRegistration(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE)
+    registered_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} → {self.workshop.title}"

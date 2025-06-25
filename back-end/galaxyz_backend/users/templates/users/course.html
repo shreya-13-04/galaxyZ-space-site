@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="GalaxyZ Workshop Highlight">
-  <title>{{ workshop.title }} - GalaxyZ Space</title>
+  <meta name="description" content="GalaxyZ Course Highlight">
+  <title>{{ course.title }} - GalaxyZ Space</title>
 
   <link rel="stylesheet" href="{% static 'styles/main.css' %}" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,7 @@
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     }
 
-    .workshop-header {
+    .course-header {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
@@ -108,22 +108,20 @@
   </div>
 
   <div class="container">
-    <div class="workshop-header">
+    <div class="course-header">
       <div class="poster">
-        <img src="{{ workshop.poster.url }}" alt="{{ workshop.title }} Poster">
+        <img src="{{ course.poster.url }}" alt="{{ course.title }} Poster">
       </div>
       <div class="details">
-        <h1>{{ workshop.title }}</h1>
-        <p><strong>Instructor:</strong> {{ workshop.instructor }}</p>
-        <p><strong>Date:</strong> {{ workshop.date }} | {{ workshop.time }}</p>
-        <p><strong>Duration:</strong> {{ workshop.duration }}</p>
-        <p><strong>Price:</strong> ₹{{ workshop.price }}</p>
+        <h1>{{ course.title }}</h1>
+        <p><strong>Instructor:</strong> {{ course.instructor }}</p>
+        <p><strong>Price:</strong> ₹{{ course.price }}</p>
       </div>
     </div>
 
     <div class="section">
-      <h3>📘 Workshop Overview</h3>
-      <p>{{ workshop.description }}</p>
+      <h3>📘 course Overview</h3>
+      <p>{{ course.description }}</p>
     </div>
 
     {% if testimonials %}
@@ -155,6 +153,15 @@
       </div>
     </section>
     {% endif %}
+
+    {% if course.courseVideoLink %}
+    <div class="video-section">
+      <h3>🎥 Preview This course</h3>
+      <iframe src="{{ course.courseVideoLink }}" title="{{ course.title }} Preview" frameborder="0" allowfullscreen></iframe>
+    </div>
+    {% endif %}
+  </div>
+
   <script>
     let currentTestimonial = 0;
     const track = document.getElementById('testimonial-track');

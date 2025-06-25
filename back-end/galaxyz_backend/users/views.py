@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Course, Workshop
+from .models import Course, Workshop, CourseEnrollment, WorkshopRegistration
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from datetime import timedelta,datetime
 
@@ -224,3 +225,31 @@ def workshop_detail(request, workshop_id):
         'testimonials': testimonials
     })
 
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    testimonials = [
+        {'text': 'A mind-blowing session! I had no idea AI was used in black hole simulations. Absolutely loved it!',
+         'author': 'Aarav Menon, Astrophysics Student'},
+        {'text': 'The instructor was phenomenal. She connected deep science with AI in such a simple way!',
+         'author': 'Meera R., AI Research Intern'},
+        {'text': 'I came for space, stayed for AI! Truly a cosmic combo. Can’t wait for the next workshop.',
+         'author': 'Tanmay Kapoor, Tech Enthusiast'},
+    ]
+
+    return render(request, 'users/course.html', {
+        'course': course,
+        'testimonials': testimonials
+    })
+
+@login_required
+def enroll_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    if request.method == 'POST':
+        user = request.user
+        if not CourseEnrollment.objects.filter(user=user, course=course).exists():
+            CourseEnrollment.objects.create(user=user, course=course)
+            course.numberOfRegisteredUsers += 1
+            course.save()
+            messages.success(request, f'You have successfully enrolled in "{course.title}"!')
+        else:
+            messages.warning(request, 'You are already enrolled in this course.')

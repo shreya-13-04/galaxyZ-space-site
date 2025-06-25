@@ -12,30 +12,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .workshop-carousel-wrapper {
-        position: relative;
-        overflow: hidden;
-        max-width: 100%;
-        }
-
-        .workshop-carousel {
-        display: flex;
-        transition: transform 0.5s ease;
-        width: fit-content;
-        }
-
         .card {
         flex: 0 0 33.33%; /* Show 3 per view */
         box-sizing: border-box;
         margin: 0 10px;
         }
+        .course-carousel-wrapper {
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
+}
 
-        .workshop-nav {
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        }
+.course-carousel {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: fit-content;
+}
+
+.course-nav {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+.workshop-carousel-wrapper {
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.workshop-carousel {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: fit-content;
+}
+
+.workshop-nav {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+
 </style>
 </head>
 <body>
@@ -72,7 +91,11 @@
                 <p class="hero-subtitle">Join GalaxyZ Space's immersive workshops and educational programs to explore space sciences like never before.</p>
                 <div class="hero-cta">
                     <a href="#workshops" class="btn btn-glow">Explore Workshops</a>
-                    <a href="#registration" class="btn btn-outline btn-pulse">Sign Up Now</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-glow">Dashboard</a>
+                    {% else %}
+                        <a href="{% url 'register' %}" class="btn btn-outline btn-pulse">Sign Up Now</a>
+                    {% endif %}
                 </div>
             </div>
             <div class="planet-container">
@@ -112,44 +135,77 @@
             </div>
         </section>
         
-         <section id="workshops" class="section bg-dark">
-  <div class="section-header">
-    <h2 class="section-title">Our <span class="text-gradient">Workshops</span></h2>
-    <p class="section-subtitle">Discover our range of educational programs designed to ignite your passion for space</p>
-  </div>
-
-  <div class="workshop-carousel-wrapper">
-    <div class="workshop-carousel" id="workshop-track">
-      {% for workshop in workshops %}
-      <article class="card card-hover">
-        <div class="card-img-container">
-          <img src="{{ workshop.poster.url }}" alt="{{ workshop.title }}" class="card-img" loading="lazy">
-          <div class="card-img-overlay"></div>
+        <section id="workshops" class="section bg-dark">
+        <div class="section-header">
+            <h2 class="section-title">Our <span class="text-gradient">Workshops</span></h2>
+            <p class="section-subtitle">Discover our range of educational programs designed to ignite your passion for space</p>
         </div>
-        <div class="card-content">
-          <h3>{{ workshop.title }}</h3>
-          <p>{{ workshop.description|truncatewords:15 }}</p>
-          <div class="card-footer">
-            <div style="font-size: 20px; font-weight: bold; color: #4FFF70;">
-              {% if workshop.price == 0 %}
-                <span style="text-decoration: line-through;">₹299</span> FREE
-              {% else %}
-                ₹{{ workshop.price }}
-              {% endif %}
+
+        <div class="workshop-carousel-wrapper">
+            <div class="workshop-carousel" id="workshop-track">
+            {% for workshop in workshops %}
+            <article class="card card-hover">
+                <div class="card-img-container">
+                <img src="{{ workshop.poster.url }}" alt="{{ workshop.title }}" class="card-img" loading="lazy">
+                <div class="card-img-overlay"></div>
+                </div>
+                <div class="card-content">
+                <h3>{{ workshop.title }}</h3>
+                <p>{{ workshop.description|truncatewords:15 }}</p>
+                <div class="card-footer">
+                    <div style="font-size: 20px; font-weight: bold; color: #4FFF70;">
+                    {% if workshop.price == 0 %}
+                        <span style="text-decoration: line-through;">₹299</span> FREE
+                    {% else %}
+                        ₹{{ workshop.price }}
+                    {% endif %}
+                    </div>
+                    <a href="{% url 'workshop_detail' workshop.id %}" class="btn btn-glow" target="_blank">Register</a>
+                </div>
+                </div>
+            </article>
+            {% endfor %}
             </div>
-            <a href="{% url 'workshop_detail' workshop.id %}" class="btn btn-glow" target="_blank">Register</a>
-          </div>
-        </div>
-      </article>
-      {% endfor %}
-    </div>
 
-    <div class="workshop-nav">
-      <button class="testimonial-nav-btn" onclick="prevWorkshop()"><i class="fas fa-chevron-left"></i></button>
-      <button class="testimonial-nav-btn" onclick="nextWorkshop()"><i class="fas fa-chevron-right"></i></button>
-    </div>
-  </div>
-</section>
+            <div class="workshop-nav">
+            <button class="testimonial-nav-btn" onclick="prevWorkshop()"><i class="fas fa-chevron-left"></i></button>
+            <button class="testimonial-nav-btn" onclick="nextWorkshop()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+        </section>
+                <section id="courses" class="section bg-dark">
+        <div class="section-header">
+            <h2 class="section-title">Our <span class="text-gradient">courses</span></h2>
+            <p class="section-subtitle">Discover our range of educational programs designed to ignite your passion for space</p>
+        </div>
+
+        <div class="course-carousel-wrapper">
+            <div class="course-carousel" id="course-track">
+            {% for course in courses %}
+            <article class="card card-hover">
+                <div class="card-img-container">
+                <img src="{{ course.poster.url }}" alt="{{ course.title }}" class="card-img" loading="lazy">
+                <div class="card-img-overlay"></div>
+                </div>
+                <div class="card-content">
+                <h3>{{ course.title }}</h3>
+                <p>{{ course.description|truncatewords:15 }}</p>
+                <div class="card-footer">
+                    <div style="font-size: 20px; font-weight: bold; color: #4FFF70;">
+                    {% if course.price == 0 %}
+                        <span style="text-decoration: line-through;">₹299</span> FREE
+                    {% else %}
+                        ₹{{ course.price }}
+                    {% endif %}
+                    </div>
+                    <a href="{% url 'course_detail' course.id %}" class="btn btn-glow" target="_blank">Register</a>
+                </div>
+                </div>
+            </article>
+            {% endfor %}
+            </div>
+        </div>
+        </section>
         
         <section id="testimonials" class="section bg-primary">
         <div class="section-header">
