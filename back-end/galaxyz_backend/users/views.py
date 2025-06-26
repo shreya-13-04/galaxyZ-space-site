@@ -10,7 +10,8 @@ from datetime import timedelta,datetime
 
 @login_required
 def dashboard(request):
-    return render(request, 'users/dashboard.html')
+    enrollments = CourseEnrollment.objects.filter(user=request.user).select_related('course')
+    return render(request, 'users/dashboard.html', {'enrollments': enrollments})
 
 # Render register page and handle POST request
 def register_view(request):
@@ -227,6 +228,7 @@ def workshop_detail(request, workshop_id):
 
 def course_detail(request, course_id):
     course = get_object_or_404(Course, id=course_id)
+    is_enrolled = CourseEnrollment.objects.filter(user=request.user, course=course).exists()
     testimonials = [
         {'text': 'A mind-blowing session! I had no idea AI was used in black hole simulations. Absolutely loved it!',
          'author': 'Aarav Menon, Astrophysics Student'},
@@ -238,18 +240,6 @@ def course_detail(request, course_id):
 
     return render(request, 'users/course.html', {
         'course': course,
-        'testimonials': testimonials
+        'testimonials': testimonials,
+        'is_enrolled': is_enrolled,
     })
-
-@login_required
-def enroll_course(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    if request.method == 'POST':
-        user = request.user
-        if not CourseEnrollment.objects.filter(user=user, course=course).exists():
-            CourseEnrollment.objects.create(user=user, course=course)
-            course.numberOfRegisteredUsers += 1
-            course.save()
-            messages.success(request, f'You have successfully enrolled in "{course.title}"!')
-        else:
-            messages.warning(request, 'You are already enrolled in this course.')

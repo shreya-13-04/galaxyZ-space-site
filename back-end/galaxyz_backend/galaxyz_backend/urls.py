@@ -25,5 +25,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),       # root URL goes to main app
     path('users/', include('users.urls')),  # user-related views
+    path('payments/', include('payments.urls')),  # payment-related views
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

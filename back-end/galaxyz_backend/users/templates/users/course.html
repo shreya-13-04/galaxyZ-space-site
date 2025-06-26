@@ -92,6 +92,38 @@
     #testimonials {
       margin-top: 30px;
     }
+    .video-lock-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.video-lock-wrapper iframe {
+  width: 100%;
+  height: 400px;
+  border-radius: 12px;
+}
+
+.locked-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 400px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.locked-overlay i {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
   </style>
 </head>
 
@@ -107,17 +139,37 @@
     <a href="{% url 'home' %}"><img src="{% static 'assets/frontmoving.png' %}" alt="Logo" /></a>
   </div>
 
+
   <div class="container">
-    <div class="course-header">
-      <div class="poster">
-        <img src="{{ course.poster.url }}" alt="{{ course.title }} Poster">
+    {% if messages %}
+    {% for message in messages %}
+      <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align:center;">
+        {{ message }}
+      </p>
+    {% endfor %}
+    {% endif %}<div class="course-header">
+  <div class="poster">
+    <img src="{{ course.poster.url }}" alt="{{ course.title }} Poster">
+  </div>
+  <div class="details">
+    <h1>{{ course.title }}</h1>
+    <p><strong>Instructor:</strong> {{ course.instructor }}</p>
+    {% if is_enrolled %}
+      <p style="color: green; font-weight: bold;">You are already enrolled in this course!</p>
+    {% else %}
+      <div class="card-footer" style="font-size: 20px; font-weight: bold; color: #4FFF70;">
+        {% if course.price == 0 %}
+          <span style="text-decoration: line-through;">₹299</span> FREE
+        {% else %}
+          ₹{{ course.price }}
+        {% endif %}
+        <br><br>
+        <a href="{% url 'enroll_course' course.id %}" class="btn btn-glow">Register</a>
       </div>
-      <div class="details">
-        <h1>{{ course.title }}</h1>
-        <p><strong>Instructor:</strong> {{ course.instructor }}</p>
-        <p><strong>Price:</strong> ₹{{ course.price }}</p>
-      </div>
-    </div>
+    {% endif %}
+  </div>
+</div>
+
 
     <div class="section">
       <h3>📘 course Overview</h3>
@@ -155,11 +207,36 @@
     {% endif %}
 
     {% if course.courseVideoLink %}
-    <div class="video-section">
-      <h3>🎥 Preview This course</h3>
-      <iframe src="{{ course.courseVideoLink }}" title="{{ course.title }} Preview" frameborder="0" allowfullscreen></iframe>
+<div class="video-section">
+  <h3>🎥 Course Content</h3>
+
+  {% if is_enrolled %}
+    <iframe 
+      src="{{ course.courseVideoLink }}" 
+      title="{{ course.title }} Preview" 
+      frameborder="0" 
+      allowfullscreen>
+    </iframe>
+
+  {% else %}
+    <div class="video-lock-wrapper" onclick="promptEnroll()">
+      <iframe 
+        src="{{ course.courseVideoLink }}" 
+        title="Locked Preview" 
+        frameborder="0" 
+        allowfullscreen 
+        style="filter: blur(8px); pointer-events: none;">
+      </iframe>
+      <div class="locked-overlay">
+        <i class="fas fa-lock"></i>
+        <p>This video is locked. Enroll to unlock full access!</p>
+        <button class="btn btn-glow">Buy Course</button>
+      </div>
     </div>
-    {% endif %}
+  {% endif %}
+</div>
+{% endif %}
+
   </div>
 
   <script>
@@ -181,5 +258,13 @@
       updateSlider();
     }
   </script>
+  <script>
+function promptEnroll() {
+  if (confirm("This content is locked. Would you like to enroll in this course?")) {
+    window.location.href = "{% url 'enroll_course' course.id %}";
+  }
+}
+</script>
+
 </body>
 </html>

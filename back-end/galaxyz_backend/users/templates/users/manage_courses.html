@@ -90,7 +90,7 @@
       <p><span class="label">Instructor:</span> {{ course.instructor }}</p>
       <p><span class="label">Price:</span> ₹{{ course.price }}</p>
       <p><span class="label">Created:</span> {{ course.created_at|date:"M d, Y" }}</p>
-      <p><span class="label">Students Enrolled:</span> {{ course.enrollment_set.count }}</p>
+      <p><span class="label">Students Enrolled:</span> {{ course.numberOfRegisteredUsers }}</p>
       {% if course.pdf %}
       <p style="color:white;">Current PDF: <a href="{{ course.pdf.url }}" target="_blank" style="color:lightblue;">View</a></p>
       {% endif %}

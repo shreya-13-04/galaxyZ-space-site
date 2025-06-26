@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',  # Custom user app
     'main',  # Main app for the project
+    'payments',  # Payments app for handling transactions
 ]
 
 MIDDLEWARE = [
@@ -130,4 +131,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+RAZORPAY_KEY_ID = 'rzp_test_DY67A1HHmswqGK'
+RAZORPAY_KEY_SECRET = 'vN3h9yerALAmDV16DoqM5asR'
+
 
