@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - {{ workshop.title }}</title>
+  <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Space Grotesk', sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    .box {
+      background: rgba(255,255,255,0.05);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    button {
+      background: #6c63ff;
+      padding: 15px 30px;
+      font-size: 16px;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>{{ workshop.title }}</h1>
+    <p><strong>Instructor:</strong> {{ workshop.instructor }}</p>
+    <p><strong>Price:</strong> ₹{{ workshop.price }}</p>
+    <button id="pay-button">Pay ₹{{ workshop.price }}</button>
+<form id="payment-form" action="{% url 'payment_success_workshop' workshop.id %}" method="POST">
+  {% csrf_token %}
+  <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+  <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+  <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+</form>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  document.getElementById('pay-button').onclick = function(e){
+    var options = {
+        key: "{{ razorpay_key_id }}",
+        amount: "{{ payment.amount }}",
+        currency: "INR",
+        name: "{{ course.title }}",
+        description: "Course Enrollment",
+        order_id: "{{ payment.id }}",
+        handler: function (response) {
+            document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+            document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+            document.getElementById('razorpay_signature').value = response.razorpay_signature;
+            document.getElementById('payment-form').submit();
+        },
+        modal: {
+            // ✅ Fires when payment window is closed before completion
+            ondismiss: function () {
+                alert("❌ Payment popup closed or failed.");
+                window.location.href = "{% url 'payment_failure_workshop' workshop.id %}?reason=Payment+was+not+completed";
+            }
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+    e.preventDefault(); // prevent default form submit
+  };
+</script>
+
+</body>
+</html>

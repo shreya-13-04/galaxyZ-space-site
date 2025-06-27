@@ -141,6 +141,7 @@ def edit_course(request, course_id):
         price = request.POST.get('price')
         instructor = request.POST.get('instructor')
         poster = request.FILES.get('poster')
+        courseVideoLink = request.POST.get('courseVideoLink')
         pdf = request.FILES.get('pdf')
         if instructor:
             course.instructor = instructor
@@ -152,6 +153,8 @@ def edit_course(request, course_id):
             course.price = price
         if poster:
             course.poster = poster
+        if courseVideoLink:
+            course.courseVideoLink = courseVideoLink
         if pdf:
             course.pdf = pdf 
 
@@ -212,6 +215,7 @@ def delete_workshop(request, workshop_id):
 
 def workshop_detail(request, workshop_id):
     workshop = get_object_or_404(Workshop, id=workshop_id)
+    is_registered = WorkshopRegistration.objects.filter(user=request.user, workshop=workshop).exists()
     testimonials = [
         {'text': 'A mind-blowing session! I had no idea AI was used in black hole simulations. Absolutely loved it!',
          'author': 'Aarav Menon, Astrophysics Student'},
@@ -223,7 +227,8 @@ def workshop_detail(request, workshop_id):
 
     return render(request, 'users/workshop.html', {
         'workshop': workshop,
-        'testimonials': testimonials
+        'testimonials': testimonials,
+        'is_registered' : is_registered,
     })
 
 def course_detail(request, course_id):

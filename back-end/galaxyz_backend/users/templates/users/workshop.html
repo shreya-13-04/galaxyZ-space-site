@@ -92,6 +92,36 @@
     #testimonials {
       margin-top: 30px;
     }
+    .meet-section {
+      margin-top: 40px;
+    }
+
+    .meet-lock-wrapper {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .meet-lock-wrapper:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .locked-meet-box i {
+      color: #fff;
+      opacity: 0.7;
+    }
+
+    .locked-meet-box p {
+      color: #ccc;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
   </style>
 </head>
 
@@ -112,14 +142,23 @@
       <div class="poster">
         <img src="{{ workshop.poster.url }}" alt="{{ workshop.title }} Poster">
       </div>
-      <div class="details">
-        <h1>{{ workshop.title }}</h1>
-        <p><strong>Instructor:</strong> {{ workshop.instructor }}</p>
-        <p><strong>Date:</strong> {{ workshop.date }} | {{ workshop.time }}</p>
-        <p><strong>Duration:</strong> {{ workshop.duration }}</p>
-        <p><strong>Price:</strong> ₹{{ workshop.price }}</p>
+  <div class="details">
+    <h1>{{ workshop.title }}</h1>
+    <p><strong>Instructor:</strong> {{ workshop.instructor }}</p>
+    {% if is_registered %}
+      <p style="color: green; font-weight: bold;">You are already enrolled in this course!</p>
+    {% else %}
+      <div class="card-footer" style="font-size: 20px; font-weight: bold; color: #4FFF70;">
+        {% if workshop.price == 0 %}
+          <span style="text-decoration: line-through;">₹299</span> FREE
+        {% else %}
+          ₹{{ workshop.price }}
+        {% endif %}
+        <br><br>
+        <a href="{% url 'enroll_workshop' workshop.id %}" class="btn btn-glow">Register</a>
       </div>
-    </div>
+    {% endif %}
+  </div>
 
     <div class="section">
       <h3>📘 Workshop Overview</h3>
@@ -155,6 +194,30 @@
       </div>
     </section>
     {% endif %}
+    {% if workshop.meetLink %}
+<div class="meet-section">
+  <h3>📅 Live Session Link</h3>
+
+  {% if is_registered %}
+    <p>
+      <strong>Join Live:</strong> 
+      <a href="{{ workshop.meetLink }}" class="btn btn-glow" target="_blank">
+        Click to Join
+      </a>
+    </p>
+
+  {% else %}
+    <div class="meet-lock-wrapper" onclick="promptEnroll()">
+      <div class="locked-meet-box">
+        <i class="fas fa-lock fa-2x"></i>
+        <p>This session link is locked. Enroll to join the live session.</p>
+        <button class="btn btn-glow">Buy Course</button>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endif %}
+
   <script>
     let currentTestimonial = 0;
     const track = document.getElementById('testimonial-track');
@@ -174,5 +237,12 @@
       updateSlider();
     }
   </script>
+  <script>
+  function promptEnroll() {
+  if (confirm("This content is locked. Would you like to enroll in this course?")) {
+    window.location.href = "{% url 'enroll_workshop' workshop.id %}";
+  }
+}
+</script>
 </body>
 </html>
