@@ -63,14 +63,23 @@ def add_course(request):
         course_description = request.POST.get('description')
         instructor = request.POST.get('instructor')
         price = request.POST.get('price')
+        duration = request.POST.get('duration')
         courseVideoLink = request.POST.get('courseVideoLink')
         poster = request.FILES.get('poster')
         pdf = request.FILES.get('pdf')
+
+        try:
+            duration_float = float(duration)  # ← Accept 1.5 etc
+            duration_obj = timedelta(hours=duration_float)
+        except ValueError:
+            messages.error(request, "Invalid date or duration format.")
+            return render(request, 'users/add_workshop.html')
         # Here you would typically save the course to the database
         Course.objects.create(
             title=course_name,
             description=course_description,
             instructor=instructor,
+            duration=duration_obj,
             price=price,
             courseVideoLink=courseVideoLink,
             poster=poster,
@@ -180,9 +189,20 @@ def edit_workshop(request, workshop_id):
         price = request.POST.get('price')
         instructor = request.POST.get('instructor')
         poster = request.FILES.get('poster')
-        dateAndTime = request.POST.get('dateAndTime')
+        date = request.POST.get('date')
+        time = request.POST.get('time')
         duration = request.POST.get('duration')
         meetLink = request.POST.get('meetLink')
+
+        try:
+            date_obj = datetime.strptime(date, "%Y-%m-%d")
+            time_obj = datetime.strptime(time, "%H:%M").time()
+            duration_float = float(duration)  # ← Accept 1.5 etc
+            duration_obj = timedelta(hours=duration_float)
+        except ValueError:
+            messages.error(request, "Invalid date or duration format.")
+            return render(request, 'users/edit_workshop.html')
+        
         if instructor:
             workshop.instructor = instructor
         if title:
@@ -193,10 +213,12 @@ def edit_workshop(request, workshop_id):
             workshop.price = price
         if poster:
             workshop.poster = poster
-        if dateAndTime:
-            workshop.dateAndTime = dateAndTime
+        if date:
+            workshop.date = date_obj
+        if time:
+            workshop.time = time_obj
         if duration:
-            workshop.duration = duration
+            workshop.duration = duration_obj
         if meetLink:
             workshop.meetLink = meetLink
 
@@ -248,3 +270,41 @@ def course_detail(request, course_id):
         'testimonials': testimonials,
         'is_enrolled': is_enrolled,
     })
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def convert_workshop_to_course(request, workshop_id):
+    workshop = get_object_or_404(Workshop, id=workshop_id)
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        price = request.POST.get('price')
+        duration = request.POST.get('duration')
+        try:
+            duration_float = float(duration)  # ← Accept 1.5 etc
+            duration_obj = timedelta(hours=duration_float)
+        except ValueError:
+            messages.error(request, "Invalid date or duration format.")
+            return render(request, 'users/convert_workshop_to_course.html', {'workshop': workshop})
+        
+        instructor = request.POST.get('instructor')
+        poster = request.FILES.get('poster')
+        courseVideoLink = request.POST.get('courseVideoLink')
+        pdf = request.FILES.get('pdf')
+
+        course = Course.objects.create(
+            title=title,
+            description=description,
+            instructor=instructor,
+            duration=duration_obj,
+            price=price,
+            courseVideoLink=courseVideoLink,
+            poster=poster or workshop.poster,  # Use workshop poster if not provided
+            pdf=pdf
+        )
+        # Optionally delete the workshop after conversion
+        workshop.delete()
+
+        messages.success(request, f'Workshop "{workshop.title}" converted to course "{course.title}" successfully!')
+        return redirect('manage_courses')
+    return render(request, 'users/convert_workshop_to_course.html', {'workshop': workshop})

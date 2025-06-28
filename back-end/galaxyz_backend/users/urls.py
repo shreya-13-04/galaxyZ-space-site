@@ -16,4 +16,5 @@ urlpatterns = [
     path('workshop/<int:workshop_id>/delete/', views.delete_workshop, name='delete_workshop'),
     path('workshop/<int:workshop_id>/', views.workshop_detail, name='workshop_detail'),
     path('course/<int:course_id>/', views.course_detail, name='course_detail'),
+    path('convert_workshop_to_course/<int:workshop_id>/', views.convert_workshop_to_course, name='convert_workshop_to_course'),
 ]

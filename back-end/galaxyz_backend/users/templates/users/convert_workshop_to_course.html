@@ -87,7 +87,7 @@
       <a href="{% url 'home' %}"><img src="{% static 'assets/frontmoving.png' %}" alt="Logo" /></a>
     </div>
   <div class="form-container">
-    <h2>Edit Course</h2>
+    <h2>Edit workshop</h2>
     <p>Leave fields unchanged to make no changes</p>
     {% if messages %}
     {% for message in messages %}
@@ -96,34 +96,31 @@
       </p>
     {% endfor %}
     {% endif %}
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST">
   {% csrf_token %}
 
   <label>Title</label>
-  <input type="text" name="title" value="{{ course.title }}" />
+  <input type="text" name="title" value="{{ workshop.title }}" />
 
   <label>Description</label>
-  <textarea name="description">{{ course.description }}</textarea>
-
-  <label>Price</label>
-  <input type="number" name="price" value="{{ course.price }}" step="0.01" />
-
+  <textarea name="description">{{ workshop.description }}</textarea>
   <label>Instructor</label>
-  <input type="text" name="instructor" value="{{ course.instructor }}" />
-
-  <input type="text" name="courseVideoLink" value="{{ course.courseVideoLink }}"/>
+  <input type="text" name="instructor" value="{{ workshop.instructor }}" />      
+  <label>Price</label>
+  <input type="number" name="price" value="{{ workshop.price }}" step="0.01" />
+  <label>Duration (in hours)</label>
+  <input type="number" name="duration" value="{{ workshop.duration }}" step="0.1" />
+  <label>Add Course Video Link</label>
+  <input type="text" name="courseVideoLink"/>
 
   <label style="color:white;">Current Poster:</label><br>
-  <img src="{{ course.poster.url }}" alt="Course Poster" style="max-width: 200px; border-radius: 8px; margin-bottom: 1rem;"><br>
+  <img src="{{ workshop.poster.url }}" alt="workshop Poster" style="max-width: 200px; border-radius: 8px; margin-bottom: 1rem;"><br>
   
   <label style="color:white;">Upload New Poster (JPG/PNG):</label>
   <input type="file" name="poster" accept="image/*" />
-  
-  <label >Current Course Material (PDF): <a href="{{ course.pdf.url }}" target="_blank" style="color:lightblue;">View</a></label><br>
-  <br>
-  <label style="color:white;">Upload New Course Material (PDF):</label>
-  <input type="file" name="pdf" accept="application/pdf" />
 
+  <label style="color:white;">Upload Course Material (PDF):</label>
+  <input type="file" name="pdf" accept="application/pdf" />
   <button type="submit">Save Changes</button>
 </form>
   </div>

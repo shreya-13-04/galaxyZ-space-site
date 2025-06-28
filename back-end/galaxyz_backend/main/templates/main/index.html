@@ -214,6 +214,11 @@
             </article>
             {% endfor %}
             </div>
+            </div>
+            <div class="workshop-nav">
+            <button class="testimonial-nav-btn" onclick="prevCourse()"><i class="fas fa-chevron-left"></i></button>
+            <button class="testimonial-nav-btn" onclick="nextCourse()"><i class="fas fa-chevron-right"></i></button>
+            </div>
         </div>
         </section>
         
@@ -450,6 +455,31 @@
     if (workshopIndex > 0) {
       workshopIndex--;
       updateWorkshopSlider();
+    }
+  }
+</script>
+<script>
+  let courseIndex = 0;
+  const courseTrack = document.getElementById('course-track');
+  const courseCards = document.querySelectorAll('#course-track .card');
+  const courseCardsPerPage = 3;
+  const totalCoursePages = Math.ceil(courseCards.length / courseCardsPerPage);
+
+  function updateCourseSlider() {
+    courseTrack.style.transform = `translateX(-${courseIndex * 100}%)`;
+  }
+
+  function nextCourse() {
+    if (courseIndex < totalCoursePages - 1) {
+      courseIndex++;
+      updateCourseSlider();
+    }
+  }
+
+  function prevCourse() {
+    if (courseIndex > 0) {
+      courseIndex--;
+      updateCourseSlider();
     }
   }
 </script>
