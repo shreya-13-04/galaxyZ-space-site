@@ -183,6 +183,8 @@ def delete_course(request, course_id):
 @user_passes_test(lambda u: u.is_superuser)
 def edit_workshop(request, workshop_id):
     workshop = get_object_or_404(Workshop, id=workshop_id)
+    # convert timedelta to float hours
+    duration_hours = round(workshop.duration.total_seconds() / 3600, 2)
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
@@ -225,7 +227,7 @@ def edit_workshop(request, workshop_id):
         workshop.save()
         messages.success(request, f'Workshop "{workshop.title}" updated successfully!')
         return redirect('manage_workshops')
-    return render(request, 'users/edit_workshop.html', {'workshop': workshop})
+    return render(request, 'users/edit_workshop.html', {'workshop': workshop, 'duration_hours': duration_hours})
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
@@ -275,6 +277,8 @@ def course_detail(request, course_id):
 @user_passes_test(lambda u: u.is_superuser)
 def convert_workshop_to_course(request, workshop_id):
     workshop = get_object_or_404(Workshop, id=workshop_id)
+        # convert timedelta to float hours
+    duration_hours = round(workshop.duration.total_seconds() / 3600, 2)
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
@@ -307,4 +311,4 @@ def convert_workshop_to_course(request, workshop_id):
 
         messages.success(request, f'Workshop "{workshop.title}" converted to course "{course.title}" successfully!')
         return redirect('manage_courses')
-    return render(request, 'users/convert_workshop_to_course.html', {'workshop': workshop})
+    return render(request, 'users/convert_workshop_to_course.html', {'workshop': workshop, 'duration_hours': duration_hours})
