@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Edit your blog post on GalaxyZ Space.">
+  <title>Edit Blog - GalaxyZ Space</title>
+  <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .form-container {
+      position: relative;
+      z-index: 10;
+      max-width: 500px;
+      margin: 20px auto;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .form-container input,
+    .form-container textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border: none;
+      border-radius: 8px;
+      background: #222;
+      color: white;
+    }
+    .form-container button {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 1rem;
+      border: none;
+      border-radius: 8px;
+      background: #6c63ff;
+      color: white;
+      cursor: pointer;
+    }
+    .form-container p {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .form-container a {
+      color: #6c63ff;
+      text-decoration: none;
+    }
+    .logo-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 60px;
+    }
+    .logo-wrapper img {
+      max-width: 150px;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="space-background">
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    <div class="shooting-stars"></div>
+    <div class="nebula"></div>
+  </div>
+
+  <div class="logo-wrapper">
+    <a href="{% url 'home' %}"><img src="{% static 'assets/frontmoving.png' %}" alt="Logo" /></a>
+  </div>
+
+  <div class="form-container">
+    <h2>Edit Blog</h2>
+    <p>Leave fields unchanged to keep current values</p>
+
+    {% if messages %}
+      {% for message in messages %}
+        <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align:center;">
+          {{ message }}
+        </p>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <label>Title</label>
+      <input type="text" name="title" value="{{ blog.title }}" required />
+
+      <label>Subtitle</label>
+      <input type="text" name="subtitle" value="{{ blog.subtitle }}" />
+
+      <label>Author</label>
+      <input type="text" name="author" value="{{ blog.author }}" required />
+
+      <label>Content</label>
+      <textarea name="content" rows="6" required>{{ blog.content }}</textarea>
+
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+</body>
+</html>

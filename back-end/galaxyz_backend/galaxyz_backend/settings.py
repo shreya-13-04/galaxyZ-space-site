@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'users',  # Custom user app
     'main',  # Main app for the project
     'payments',  # Payments app for handling transactions
+    'blog',  # Blog app for managing blog posts
 ]
 
 MIDDLEWARE = [

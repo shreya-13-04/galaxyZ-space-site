@@ -135,7 +135,7 @@
             </div>
         </section>
         
-        <section id="workshops" class="section bg-dark">
+        <section id="workshops" class="section bg-primary">
         <div class="section-header">
             <h2 class="section-title">Our <span class="text-gradient">Workshops</span></h2>
             <p class="section-subtitle">Discover our range of educational programs designed to ignite your passion for space</p>
@@ -178,7 +178,8 @@
             </div>
         </div>
         </section>
-                <section id="courses" class="section bg-dark">
+        
+        <section id="courses" class="section bg-primary">
         <div class="section-header">
             <h2 class="section-title">Our <span class="text-gradient">courses</span></h2>
             <p class="section-subtitle">Discover our range of educational programs designed to ignite your passion for space</p>
@@ -268,40 +269,35 @@
         </div>
         </section>
 
-        
-        <section id="registration" class="section bg-dark">
-            <div class="section-header">
-                <h2 class="section-title">Register for a <span class="text-gradient">Workshop</span></h2>
-                <p class="section-subtitle">Begin your cosmic journey with GalaxyZ Space today</p>
+        <section id="blog" class="section bg-primary">
+        <div class="section-header">
+            <h2 class="section-title"><span class="text-gradient">Latest</span> Posts</h2>
+            <p class="section-subtitle">Get the latest updates on space, tech, and GalaxyZ events</p>
+        </div>
+
+        <div class="course-carousel-wrapper">
+            <div class="course-carousel" id="blog-track">
+            {% for blog in blogs %}
+            <article class="card card-hover">
+                <div class="card-content">
+                <h3>{{ blog.title }}</h3>
+                <p>{{ blog.content|truncatewords:20 }}</p>
+                <div class="card-footer">
+                    <p style="font-size: 14px; color: #ccc;">🖊️ {{ blog.author }} | 📅 {{ blog.created_at|date:"M d, Y" }}</p>
+                    <a href="{% url 'blog_detail' blog.id %}" class="btn btn-outline btn-pulse">Read More</a>
+                </div>
+                </div>
+            </article>
+            {% endfor %}
             </div>
-            <div class="registration-form-container">
-                <form class="registration-form">
-                    <div class="form-group">
-                        <label for="name">Full Name</label>
-                        <input type="text" id="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="workshop">Select Workshop</label>
-                        <select id="workshop" required>
-                            <option value="">Choose a workshop</option>
-                            <option value="cosmic-explorers">Cosmic Explorers ($49)</option>
-                            <option value="rocket-science">Rocket Science 101 ($79)</option>
-                            <option value="interstellar-physics">Interstellar Physics ($99)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Any Special Requests?</label>
-                        <textarea id="message" rows="3"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-glow btn-block">Register Now</button>
-                </form>
-            </div>
+        </div>
+
+        <div class="workshop-nav">
+            <button class="testimonial-nav-btn" onclick="prevCourse()"><i class="fas fa-chevron-left"></i></button>
+            <button class="testimonial-nav-btn" onclick="nextCourse()"><i class="fas fa-chevron-right"></i></button>
+        </div>
         </section>
-        
+
         <section id="contact" class="section bg-primary">
             <div class="section-header">
                 <h2 class="section-title">Contact <span class="text-gradient">Us</span></h2>
@@ -341,10 +337,11 @@
             </div>
         </section>
         
-        <aside class="newsletter bg-dark">
+        <aside class="section bg-primary">
+            <div class="section-header">
             <h3>Stay Updated</h3>
             <p>Subscribe to our newsletter for the latest news, events, and discoveries in space science.</p>
-            <form class="newsletter-form">
+            <form>
                 <div class="form-group-newsletter">
                     <label for="newsletter-email" class="sr-only">Your email address</label>
                     <input type="email" id="newsletter-email" placeholder="Your email address" required>
@@ -352,6 +349,7 @@
             <br>
                 <button type="submit" class="btn btn-glow">Subscribe</button>
             </form>
+        </div>
         </aside>
     </main>
     
