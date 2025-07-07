@@ -1,0 +1,8 @@
+Django>=4.2,<5.0
+gunicornpip
+whitenoise
+psycopg2-binary
+django-environ
+setuptools
+razorpay
+Pillow

@@ -1,8 +1,0 @@
-Django>=4.2,<5.0
-gunicorn
-whitenoise
-psycopg2-binary
-django-environ
-setuptools
-razorpay
-Pillow

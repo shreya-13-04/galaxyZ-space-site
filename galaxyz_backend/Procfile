@@ -1,0 +1,1 @@
+web: gunicorn galaxyz_backend.wsgi --log-file -
