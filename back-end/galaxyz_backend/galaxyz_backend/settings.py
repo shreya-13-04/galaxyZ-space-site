@@ -137,3 +137,19 @@ RAZORPAY_KEY_ID = 'rzp_test_DY67A1HHmswqGK'
 RAZORPAY_KEY_SECRET = 'vN3h9yerALAmDV16DoqM5asR'
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'shanthu2005best@gmail.com'
+EMAIL_HOST_PASSWORD = 'rormvjezrswklmty'
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Optional: to avoid spam filters, add a prefix to your email subjects
+EMAIL_SUBJECT_PREFIX = '[GalaxyZ Space] '
+
+# Timeout in seconds for email sending
+EMAIL_TIMEOUT = 20
