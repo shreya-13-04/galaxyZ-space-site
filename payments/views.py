@@ -51,7 +51,7 @@ def payment_success_workshop(request, workshop_id):
 
         # Check again if already enrolled (safety)
         if not WorkshopRegistration.objects.filter(user=user, workshop=workshop).exists():
-            CourseEnrollment.objects.create(user=user, workshop=workshop)
+            WorkshopRegistration.objects.create(user=user, workshop=workshop)
             workshop.numberOfRegisteredUsers += 1
             workshop.save()
         
