@@ -2,6 +2,9 @@ import os
 from pathlib import Path
 import environ
 
+
+
+
 # Initialize environment variables
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
