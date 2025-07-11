@@ -66,22 +66,33 @@
     </div>
     
     <nav class="navbar">
-         <a href="#" class="logo">
+    <a href="#" class="logo">
         <img src="{% static 'assets/logo2.png' %}" alt="GalaxyZ Space Logo" class="logo-img">
     </a>
-        <ul class="nav-links">
-    <li><a href="#about"><span class="nav-link-text">About Us</span></a></li>
-    <li><a href="#workshops"><span class="nav-link-text">Workshops</span></a></li>
-    <li><a href="#testimonials"><span class="nav-link-text">Testimonials</span></a></li>
-    <li><a href="#contact"><span class="nav-link-text">Contact</span></a></li>
-{% if user.is_authenticated %}
-    <li><a href="{% url 'dashboard' %}" class="btn btn-glow">Profile</a></li>
-    <li><a href="{% url 'logout' %}" class="btn btn-glow">Logout</a></li>
-{% else %}
-    <a href="{% url 'login' %}" class="btn btn-glow">Login</a>
-{% endif %}        
-</ul>
-    </nav>
+
+    <!-- ✨ Mobile Toggle HTML -->
+    <input type="checkbox" id="menu-toggle" />
+    <label for="menu-toggle" class="menu-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+
+    <!-- ✨ Wrap nav-links in mobile-nav -->
+    <ul class="nav-links mobile-nav">
+        <li><a href="#about"><span class="nav-link-text">About Us</span></a></li>
+        <li><a href="#workshops"><span class="nav-link-text">Workshops</span></a></li>
+        <li><a href="#testimonials"><span class="nav-link-text">Testimonials</span></a></li>
+        <li><a href="#contact"><span class="nav-link-text">Contact</span></a></li>
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'dashboard' %}" class="btn btn-glow">Profile</a></li>
+            <li><a href="{% url 'logout' %}" class="btn btn-glow">Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'login' %}" class="btn btn-glow">Login</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
     
     
     <main>

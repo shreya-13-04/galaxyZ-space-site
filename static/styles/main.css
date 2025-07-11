@@ -13,6 +13,8 @@
     --gradient: linear-gradient(135deg, var(--accent), var(--secondary));
 }
 
+
+
 /* Base Styles */
 * {
     margin: 0;
@@ -929,4 +931,222 @@ p {
 .footer-bottom .heart {
   color: #e11d48;
 }
+
+/* --- Mobile Specific Overrides --- */
+@media (max-width: 768px) {
+    body {
+        padding: 0 1rem;
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem 1.5rem;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        margin-left: 0;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .hero {
+        flex-direction: column;
+        padding: 6rem 1rem 2rem;
+        text-align: center;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .planet-container {
+        position: static;
+        width: 100%;
+        height: auto;
+        margin-top: 2rem;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .section {
+        padding: 4rem 1rem;
+    }
+
+    .testimonial-track {
+        flex-direction: column;
+    }
+
+    .testimonial {
+        min-width: 100%;
+    }
+
+    .registration-form,
+    .contact-info {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-brand-images img {
+        max-width: 100%;
+    }
+
+    .footer-social {
+        align-items: center;
+    }
+
+    .footer-address-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-address-img {
+        max-width: 100px;
+    }
+}
+/* === Mobile Menu Toggle via Checkbox Hack === */
+
+/* === Mobile Menu Toggle (CSS Only) === */
+#menu-toggle {
+  display: none;
+}
+
+.menu-icon {
+  display: none;
+  cursor: pointer;
+  z-index: 1001;
+  padding: 1rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.menu-icon span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+/* Show toggle menu only on mobile */
+@media (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+  .navbar {
+  width: 100%;
+  background-color: #0B0E3F;
+  position: relative;
+  z-index: 1000;
+  padding: 1.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+}
+
+  
+
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background-color: #0B0E3F;
+    padding: 2rem 1.5rem;
+    z-index: 1000;
+    text-align: center;
+  }
+
+  #menu-toggle:checked + .menu-icon + .mobile-nav {
+    display: flex;
+  }
+
+  .nav-links li a,
+  .nav-links li .btn {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+}
+@media (max-width: 768px) {
+  .workshop-carousel-wrapper .card {
+    flex: 0 0 80%; /* 👈 Makes the card take 80% of the screen width */
+    margin: 0 auto; /* 👈 Center it */
+  }
+
+  .card-content {
+    padding: 1.2rem;
+  }
+
+  .card-img-container {
+    border-radius: 1rem 1rem 0 0;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    text-align: center;
+  }
+}
+@media (max-width: 768px) {
+  #blog-track .card {
+    flex: 0 0 85%;
+    margin: 0 auto;
+  }
+
+  #blog-track .card h3 {
+    font-size: 1.2rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  #blog-track .card p {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  #blog-track .card-footer {
+    text-align: center;
+    margin-top: 10px;
+  }
+}
+
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .card-hover {
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .card-hover:active,
+  .card-hover:focus-within {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-hover:active .card-img,
+  .card-hover:focus-within .card-img {
+    transform: scale(1.05);
+  }
+}
+
 
