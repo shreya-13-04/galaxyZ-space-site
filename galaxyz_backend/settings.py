@@ -64,15 +64,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'galaxyz_backend.wsgi.application'
 
+
 # DATABASE
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
-        'USER': 'postgres',
+        'USER': 'postgres.rxzsmebubjhwldhnxmdb',  # use full user string you gave
         'PASSWORD': 'Galaxyzspace2303',
-        'HOST': 'db.rxzsmebubjhwldhnxmdb.supabase.co',
+        'HOST': 'aws-0-ap-south-1.pooler.supabase.com',  # removed trailing space
         'PORT': '5432',
+        # Optionally, if you want, you can add pool_mode as a query param in the connection string,
+        # but usually not needed here for Django's DATABASES dict
     }
 }
 
@@ -120,42 +123,3 @@ EMAIL_TIMEOUT = 20
 RAZORPAY_KEY_ID = env("RAZORPAY_KEY_ID", default="")
 RAZORPAY_KEY_SECRET = env("RAZORPAY_KEY_SECRET", default="")
 
-
-# settings.py
-
-# ... other settings ...
-
-# SECURE SETTINGS (Highly Recommended for Production with HTTPS)
-# -----------------------------------------------------------------------------
-# Force all non-HTTPS requests to redirect to HTTPS. Render handles SSL,
-# so this ensures your app only serves over HTTPS.
-SECURE_SSL_REDIRECT = True
-
-# Ensure session cookies are only sent over HTTPS.
-SESSION_COOKIE_SECURE = True
-
-# Ensure CSRF cookies are only sent over HTTPS.
-CSRF_COOKIE_SECURE = True
-
-# Enable HTTP Strict Transport Security (HSTS).
-# This tells browsers to only interact with your site using HTTPS for a specified duration.
-# Set to a large value (like one year: 31536000 seconds) after you are confident
-# that your site is fully functional over HTTPS.
-# Be cautious: if you enable HSTS and then later disable HTTPS, users who have
-# visited your site with HSTS enabled might be unable to access it.
-SECURE_HSTS_SECONDS = 31536000
-
-# Include subdomains when applying HSTS.
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-
-# Prevents browsers from guessing MIME types, which can prevent XSS attacks.
-SECURE_CONTENT_TYPE_NOSNIFF = True
-
-# Adds a header to prevent certain XSS attacks.
-SECURE_BROWSER_XSS_FILTER = True
-
-# If you are using Render, you will also typically need this:
-# This allows Django to trust the X-Forwarded-Proto header from Render's load balancers,
-# which tells Django if the original request was HTTP or HTTPS.
-# If you don't have this, SECURE_SSL_REDIRECT might cause redirect loops.
-USE_X_FORWARDED_HOST = True # Though often handled by Render's setup
