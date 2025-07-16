@@ -66,8 +66,16 @@ WSGI_APPLICATION = 'galaxyz_backend.wsgi.application'
 
 # DATABASE
 DATABASES = {
-    'default': env.db(default=f'sqlite:///{BASE_DIR / "db.sqlite3"}')
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'Galaxyzspace2303',
+        'HOST': 'db.rxzsmebubjhwldhnxmdb.supabase.co',
+        'PORT': '5432',
+    }
 }
+
 
 # AUTH PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [

@@ -70,7 +70,6 @@ def add_course(request):
 
         try:
             duration_float = float(duration)  # ← Accept 1.5 etc
-            duration_obj = timedelta(hours=duration_float)
         except ValueError:
             messages.error(request, "Invalid date or duration format.")
             return render(request, 'users/add_workshop.html')
@@ -79,7 +78,7 @@ def add_course(request):
             title=course_name,
             description=course_description,
             instructor=instructor,
-            duration=duration_obj,
+            duration_hours=duration_float,
             price=price,
             courseVideoLink=courseVideoLink,
             poster=poster,
@@ -106,7 +105,6 @@ def add_workshop(request):
             date_obj = datetime.strptime(date, "%Y-%m-%d")
             time_obj = datetime.strptime(time, "%H:%M").time()
             duration_float = float(duration)  # ← Accept 1.5 etc
-            duration_obj = timedelta(hours=duration_float)
         except ValueError:
             messages.error(request, "Invalid date or duration format.")
             return render(request, 'users/add_workshop.html')
@@ -118,7 +116,7 @@ def add_workshop(request):
             price=price,
             date=date_obj,
             time=time_obj,
-            duration=duration_obj,
+            duration_hours=duration_float,
             meetLink=meetLink,
             instructor=instructor,
             poster=poster
@@ -200,7 +198,6 @@ def edit_workshop(request, workshop_id):
             date_obj = datetime.strptime(date, "%Y-%m-%d")
             time_obj = datetime.strptime(time, "%H:%M").time()
             duration_float = float(duration)  # ← Accept 1.5 etc
-            duration_obj = timedelta(hours=duration_float)
         except ValueError:
             messages.error(request, "Invalid date or duration format.")
             return render(request, 'users/edit_workshop.html')
@@ -220,7 +217,7 @@ def edit_workshop(request, workshop_id):
         if time:
             workshop.time = time_obj
         if duration:
-            workshop.duration = duration_obj
+            workshop.duration_hours = duration_float
         if meetLink:
             workshop.meetLink = meetLink
 
