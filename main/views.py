@@ -9,3 +9,14 @@ def home(request):
     blogs = Blog.objects.all().order_by('-created_at')
     return render(request, 'main/index.html', {'workshops': workshops, 'courses': courses, 'blogs': blogs})
 
+def privacy(request):
+    return render(request, 'main/privacy.html')
+
+def terms(request):
+    return render(request, 'main/terms.html')
+def shipping(request):
+    return render(request, 'main/shipping.html')
+def refund(request):
+    return render(request, 'main/refund_policy.html')
+
+
