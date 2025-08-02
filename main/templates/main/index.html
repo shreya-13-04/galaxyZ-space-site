@@ -411,8 +411,8 @@
         </div>
 
         <div class="workshop-nav">
-            <button class="testimonial-nav-btn" onclick="prevCourse()"><i class="fas fa-chevron-left"></i></button>
-            <button class="testimonial-nav-btn" onclick="nextCourse()"><i class="fas fa-chevron-right"></i></button>
+            <button class="testimonial-nav-btn" onclick="prevBlog()"><i class="fas fa-chevron-left"></i></button>
+            <button class="testimonial-nav-btn" onclick="nextBlog()"><i class="fas fa-chevron-right"></i></button>
         </div>
         </section>
 
@@ -569,6 +569,30 @@ Tamil Nadu, India  – 620 021.<br></p>
       updateWorkshopSlider();
     }
   }
+</script>
+<script>
+    const blogTrack = document.getElementById('blog-track');
+    const blogCards = document.querySelectorAll('#blog-track .card');
+    const blogCardsPerPage = 3;
+    const totalBlogPages = Math.ceil(blogCards.length / blogCardsPerPage);
+    
+    function updateBlogSlider() {
+        blogTrack.style.transform = `translateX(-${courseIndex * 100}%)`;
+    }
+    
+    function nextBlog() {
+        if (courseIndex < totalBlogPages - 1) {
+        courseIndex++;
+        updateBlogSlider();
+        }
+    }
+    
+    function prevBlog() {
+        if (courseIndex > 0) {
+        courseIndex--;
+        updateBlogSlider();
+        }
+    }
 </script>
 <script>
   let courseIndex = 0;
