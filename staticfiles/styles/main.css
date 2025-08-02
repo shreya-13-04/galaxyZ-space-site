@@ -929,33 +929,3 @@ p {
 .footer-bottom .heart {
   color: #e11d48;
 }
-
-@media (max-width: 768px) {
-    .workshop-carousel .card,
-    .course-carousel .card,
-    #blog-track .card {
-        flex: 0 0 100%; 
-        scroll-snap-align: start;
-    }
-
-    .workshop-carousel,
-    .course-carousel,
-    #blog-track {
-        display: flex;
-        overflow-x: hidden; 
-    }
-    .testimonial-container {
-        overflow: hidden; 
-    }
-
-    .testimonial-track {
-        display: flex;
-        transition: transform 0.5s ease-in-out;
-    }
-    
-    .testimonial {
-        flex: 0 0 100%;
-        box-sizing: border-box;
-    }
-
-}
