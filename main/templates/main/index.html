@@ -13,97 +13,82 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="{% static 'assets/frontmoving.png' %}">
     <style>
-        .card {
-        flex: 0 0 33.33%; /* Show 3 per view */
-        box-sizing: border-box;
-        margin: 0 10px;
-        }
-        .course-carousel-wrapper {
-    position: relative;
-    overflow: hidden;
-    max-width: 100%;
+/* === General Card Styling === */
+.card {
+  box-sizing: border-box;
+  margin: 0 10px;
 }
 
-.course-carousel {
-    display: flex;
-    transition: transform 0.5s ease;
-    width: fit-content;
-}
-
-.course-nav {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
+/* === Shared Carousel Wrappers === */
+.course-carousel-wrapper,
 .workshop-carousel-wrapper {
-    position: relative;
-    overflow: hidden;
-    max-width: 100%;
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
 }
 
-.workshop-carousel {
-    display: flex;
-    transition: transform 0.5s ease;
-    width: fit-content;
-}
-
-.workshop-nav {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
-/* === Shared Carousel Styles === */
+/* === Carousel Tracks === */
 .course-carousel,
 .workshop-carousel,
 #blog-track,
 #testimonial-track {
   display: flex;
   flex-wrap: nowrap;
-  overflow: hidden;
-  transition: transform 0.4s ease-in-out;
-  will-change: transform;
+  transition: transform 0.5s ease;
+  width: 100%;
 }
 
-/* === Desktop: Show 3 Cards Per Slide === */
+/* === Cards Inside Carousel (Desktop: 3 per view) === */
 .course-carousel article,
 .workshop-carousel article,
-#blog-track article {
+#blog-track article,
+.card {
   flex: 0 0 33.3333%;
   box-sizing: border-box;
   padding: 10px;
 }
 
-/* === Mobile: Show 1 Card Per Slide === */
+/* === Mobile View: Show 1 per view === */
 @media (max-width: 768px) {
   .course-carousel article,
   .workshop-carousel article,
-  #blog-track article {
+  #blog-track article,
+  .card {
     flex: 0 0 100%;
   }
 }
 
-/* === Testimonial Container === */
+/* === Carousel Nav Buttons === */
+.course-nav,
+.workshop-nav {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* === Testimonial Section === */
 .testimonial-container {
   overflow: hidden;
   position: relative;
+  max-width: 100%;
 }
 
 #testimonial-track {
   display: flex;
-  transition: transform 0.4s ease;
   flex-wrap: nowrap;
+  transition: transform 0.4s ease;
+  width: 100%;
 }
 
-/* Desktop: 3 testimonials per view */
+/* Testimonial blockquote: 3 per view desktop */
 #testimonial-track blockquote {
-  flex: 0 0 33.333%;
+  flex: 0 0 33.3333%;
   box-sizing: border-box;
   padding: 1rem;
 }
 
-/* Mobile: Only 1 testimonial per view */
+/* Mobile: 1 testimonial per view */
 @media (max-width: 768px) {
   #testimonial-track blockquote {
     flex: 0 0 100%;

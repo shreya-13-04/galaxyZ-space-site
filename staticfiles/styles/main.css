@@ -481,6 +481,7 @@ p {
 
 /* Cards */
 
+/* === General Card Layout === */
 .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
@@ -494,6 +495,7 @@ p {
     overflow: hidden;
     transition: var(--transition);
     position: relative;
+    box-sizing: border-box;
 }
 
 .card-hover:hover {
@@ -513,12 +515,6 @@ p {
     height: 100%;
     object-fit: cover;
     transition: var(--transition);
-}
-@media (max-width: 768px) {
-    .card-img-container {
-        max-width: 1080px; /* Prevents overflow on small screens */
-        margin: 0 auto;
-    }
 }
 
 .card-hover:hover .card-img {
@@ -551,9 +547,6 @@ p {
     font-size: 1.5rem;
 }
 
-
-
-
 .price {
     font-weight: 700;
     font-size: 1.5rem;
@@ -563,7 +556,25 @@ p {
     -webkit-text-fill-color: transparent;
 }
 
-/* Testimonials */
+/* === Carousel Containers === */
+.course-carousel,
+.workshop-carousel,
+#blog-track,
+.testimonial-track {
+    display: flex;
+    overflow: hidden;
+    transition: transform 0.4s ease-in-out;
+}
+
+.course-carousel article,
+.workshop-carousel article,
+#blog-track article {
+    flex: 0 0 33.3333%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+/* === Testimonials === */
 .testimonial-container {
     max-width: 1000px;
     margin: 0 auto;
@@ -573,12 +584,15 @@ p {
 
 .testimonial-track {
     display: flex;
+    flex-wrap: nowrap;
     transition: transform 0.5s ease;
+    will-change: transform;
 }
 
 .testimonial {
-    min-width: 100%;
+    flex: 0 0 33.333%;
     padding: 0 1rem;
+    box-sizing: border-box;
     transition: var(--transition);
 }
 
@@ -647,20 +661,29 @@ p {
     transform: translateY(-3px);
 }
 
-/* Forms */
-.registration-form-container {
-    max-width: 600px;
-    margin: 0 auto;
-}
+/* === Mobile View === */
+@media (max-width: 768px) {
+    .card-img-container {
+        max-width: 100%;
+        margin: 0 auto;
+    }
 
-.registration-form {
-    display: grid;
-    gap: 1.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 2.5rem;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    .course-carousel article,
+    .workshop-carousel article,
+    #blog-track article {
+        flex: 0 0 100%;
+    }
+
+    .testimonial {
+        flex: 0 0 100%;
+        scroll-snap-align: center;
+    }
+
+    .testimonial-track {
+        scroll-snap-type: x mandatory;
+    }
 }
+/* Forms */
 
 .form-group {
     display: flex;
