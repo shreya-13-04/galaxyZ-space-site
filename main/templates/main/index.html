@@ -22,6 +22,7 @@
     position: relative;
     overflow: hidden;
     max-width: 100%;
+    overflow: visible !important;
 }
 
 .course-carousel {
@@ -53,6 +54,36 @@
     display: flex;
     justify-content: center;
     gap: 1rem;
+}
+
+/* === BLOG CAROUSEL === */
+#blog-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
+  padding: 1rem 0;
+  scroll-behavior: smooth;
+}
+
+#blog-track::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for cleaner look */
+}
+
+#blog-track article {
+  flex: 0 0 33.3333%;
+  scroll-snap-align: start;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+/* === Mobile View Fix === */
+@media (max-width: 768px) {
+  #blog-track article {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 0 10px;
+  }
 }
 
 
@@ -388,27 +419,30 @@
 
 
         <section id="blog" class="section bg-primary">
-        <div class="section-header">
-            <h2 class="section-title"><span class="text-gradient">Latest</span> Posts</h2>
-            <p class="section-subtitle">Get the latest updates on space, tech, and GalaxyZ events</p>
-        </div>
-
-        <div class="course-carousel-wrapper">
-            <div class="course-carousel" id="blog-track">
-            {% for blog in blogs %}
-            <article class="card card-hover">
-                <div class="card-content">
-                <h3>{{ blog.title }}</h3>
-                <p>{{ blog.content|truncatewords:20 }}</p>
-                <div class="card-footer">
-                    <p style="font-size: 14px; color: #ccc;">🖊️ {{ blog.author }} | 📅 {{ blog.created_at|date:"M d, Y" }}</p>
-                    <a href="{% url 'blog_detail' blog.id %}" class="btn btn-outline btn-pulse">Read More</a>
-                </div>
-                </div>
-            </article>
-            {% endfor %}
+            <div class="section-header">
+                <h2 class="section-title"><span class="text-gradient">Latest</span> Posts</h2>
+                <p class="section-subtitle">Get the latest updates on space, tech, and GalaxyZ events</p>
             </div>
-        </div>
+
+            <!-- wrapper can remain for styling or spacing -->
+            <div class="course-carousel-wrapper" style="overflow: visible;">
+                <div class="course-carousel" id="blog-track">
+                {% for blog in blogs %}
+                <article class="card card-hover">
+                    <div class="card-content">
+                    <h3>{{ blog.title }}</h3>
+                    <p>{{ blog.content|truncatewords:20 }}</p>
+                    <div class="card-footer">
+                        <p style="font-size: 14px; color: #ccc;">🖊️ {{ blog.author }} | 📅 {{ blog.created_at|date:"M d, Y" }}</p>
+                        <a href="{% url 'blog_detail' blog.id %}" class="btn btn-outline btn-pulse">Read More</a>
+                    </div>
+                    </div>
+                </article>
+                {% endfor %}
+                </div>
+            </div>
+        </section>
+
 
         <div class="workshop-nav">
             <button class="testimonial-nav-btn" onclick="prevCourse()"><i class="fas fa-chevron-left"></i></button>
