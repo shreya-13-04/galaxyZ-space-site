@@ -54,7 +54,68 @@
     justify-content: center;
     gap: 1rem;
 }
+.course-carousel,
+.workshop-carousel,
+#blog-track,
+#testimonial-track {
+  display: flex;
+  overflow: hidden;
+  transition: transform 0.4s ease-in-out;
+}
 
+.course-carousel article,
+.workshop-carousel article,
+#blog-track article {
+  flex: 0 0 33.3333%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.testimonial-track blockquote {
+  flex: 0 0 100%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+/* Mobile view: Show only 1 card */
+@media (max-width: 768px) {
+  .course-carousel article,
+  .workshop-carousel article,
+  #blog-track article {
+    flex: 0 0 100%;
+  }
+
+  .testimonial-track {
+    display: flex;
+    overflow: hidden;
+    scroll-snap-type: x mandatory;
+  }
+
+  .testimonial-track blockquote {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+  }
+}
+.testimonial-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.testimonial-track {
+  display: flex;
+  transition: transform 0.4s ease;
+}
+
+.testimonial-track blockquote {
+  flex: 0 0 33.333%;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .testimonial-track blockquote {
+    flex: 0 0 100%;
+  }
+}
 
 </style>
 </head>
@@ -527,24 +588,29 @@ Tamil Nadu, India  – 620 021.<br></p>
 </html>
 
 <script>
-  let currentTestimonial = 0;
-  const track = document.getElementById('testimonial-track');
-  var testimonials = document.querySelectorAll('.testimonial');
+let testimonialIndex = 0;
 
-  function updateSlider() {
-    track.style.transform = `translateX(-${currentTestimonial * 100}%)`;
-  }
+function updateTestimonialSlider() {
+  const cardWidth = document.querySelector('#testimonial-track blockquote')?.offsetWidth || 0;
+  document.getElementById('testimonial-track').style.transform = `translateX(-${testimonialIndex * cardWidth}px)`;
+}
 
-  function nextTestimonial() {
-    currentTestimonial = (currentTestimonial + 1) % (testimonials.length-1);
-    updateSlider();
-  }
+function nextTestimonial() {
+  const total = document.querySelectorAll('#testimonial-track blockquote').length;
+  const max = total - 1;
+  if (testimonialIndex < max) testimonialIndex++;
+  updateTestimonialSlider();
+}
 
-  function prevTestimonial() {
-    currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
-    updateSlider();
-  }
+function prevTestimonial() {
+  if (testimonialIndex > 0) testimonialIndex--;
+  updateTestimonialSlider();
+}
+
+window.addEventListener('resize', updateTestimonialSlider);
+window.addEventListener('load', updateTestimonialSlider);
 </script>
+
 <script>
   let workshopIndex = 0;
   const workshopTrack = document.getElementById('workshop-track');
@@ -571,29 +637,41 @@ Tamil Nadu, India  – 620 021.<br></p>
   }
 </script>
 <script>
-    const blogTrack = document.getElementById('blog-track');
-    const blogCards = document.querySelectorAll('#blog-track .card');
-    const blogCardsPerPage = 3;
-    const totalBlogPages = Math.ceil(blogCards.length / blogCardsPerPage);
-    
-    function updateBlogSlider() {
-        blogTrack.style.transform = `translateX(-${courseIndex * 100}%)`;
-    }
-    
-    function nextBlog() {
-        if (courseIndex < totalBlogPages - 1) {
-        courseIndex++;
-        updateBlogSlider();
-        }
-    }
-    
-    function prevBlog() {
-        if (courseIndex > 0) {
-        courseIndex--;
-        updateBlogSlider();
-        }
-    }
+let blogIndex = 0;
+
+function getBlogCardsPerPage() {
+  return window.innerWidth < 768 ? 1 : 3;
+}
+
+function updateBlogSlider() {
+  const cardsPerPage = getBlogCardsPerPage();
+  const cardWidth = document.querySelector('#blog-track .card')?.offsetWidth || 0;
+  const blogTrack = document.getElementById('blog-track');
+  blogTrack.style.transform = `translateX(-${blogIndex * cardWidth}px)`;
+}
+
+function nextBlog() {
+  const cardsPerPage = getBlogCardsPerPage();
+  const totalCards = document.querySelectorAll('#blog-track .card').length;
+  const maxIndex = Math.ceil(totalCards / cardsPerPage) - 1;
+  if (blogIndex < maxIndex) blogIndex++;
+  updateBlogSlider();
+}
+
+function prevBlog() {
+  if (blogIndex > 0) blogIndex--;
+  updateBlogSlider();
+}
+
+window.addEventListener('resize', () => {
+  updateBlogSlider();
+});
+
+window.addEventListener('load', () => {
+  updateBlogSlider();
+});
 </script>
+
 <script>
   let courseIndex = 0;
   const courseTrack = document.getElementById('course-track');
