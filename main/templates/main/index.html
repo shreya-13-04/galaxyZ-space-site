@@ -86,6 +86,32 @@
   }
 }
 
+@media (max-width: 768px) {
+  /* Hide nav buttons */
+  .testimonial-nav,
+  .blog-nav,
+  .testimonial-nav-btn,
+  .blog-nav-btn {
+    display: none !important;
+  }
+
+  /* Show only one testimonial per view */
+  #testimonial-track {
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+  }
+
+  #testimonial-track blockquote {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+  }
+
+  /* Optional: tweak blog cards too */
+  #blog-track article.card {
+    flex: 0 0 100%;
+  }
+}
+
 
 </style>
 </head>
