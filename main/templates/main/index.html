@@ -13,91 +13,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="{% static 'assets/frontmoving.png' %}">
     <style>
-/* === General Card Styling === */
-.card {
-  box-sizing: border-box;
-  margin: 0 10px;
+        .card {
+        flex: 0 0 33.33%; /* Show 3 per view */
+        box-sizing: border-box;
+        margin: 0 10px;
+        }
+        .course-carousel-wrapper {
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
 }
 
-/* === Shared Carousel Wrappers === */
-.course-carousel-wrapper,
+.course-carousel {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: fit-content;
+}
+
+.course-nav {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
 .workshop-carousel-wrapper {
-  position: relative;
-  overflow: hidden;
-  max-width: 100%;
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
 }
 
-/* === Carousel Tracks === */
-.course-carousel,
-.workshop-carousel,
-#blog-track,
-#testimonial-track {
-  display: flex;
-  flex-wrap: nowrap;
-  transition: transform 0.5s ease;
-  width: 100%;
+.workshop-carousel {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: fit-content;
 }
 
-/* === Cards Inside Carousel (Desktop: 3 per view) === */
-.course-carousel article,
-.workshop-carousel article,
-#blog-track article,
-.card {
-  flex: 0 0 33.3333%;
-  box-sizing: border-box;
-  padding: 10px;
-}
-
-/* === Mobile View: Show 1 per view === */
-@media (max-width: 768px) {
-  .course-carousel article,
-  .workshop-carousel article,
-  #blog-track article,
-  .card {
-    flex: 0 0 100%;
-  }
-}
-
-/* === Carousel Nav Buttons === */
-.course-nav,
 .workshop-nav {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-/* === Testimonial Section === */
-.testimonial-container {
-  overflow: hidden;
-  position: relative;
-  max-width: 100%;
-}
-
-#testimonial-track {
-  display: flex;
-  flex-wrap: nowrap;
-  transition: transform 0.4s ease;
-  width: 100%;
-}
-
-/* Testimonial blockquote: 3 per view desktop */
-#testimonial-track blockquote {
-  flex: 0 0 33.3333%;
-  box-sizing: border-box;
-  padding: 1rem;
-}
-
-/* Mobile: 1 testimonial per view */
-@media (max-width: 768px) {
-  #testimonial-track blockquote {
-    flex: 0 0 100%;
-    scroll-snap-align: center;
-  }
-
-  #testimonial-track {
-    scroll-snap-type: x mandatory;
-  }
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
 }
 
 
@@ -456,8 +411,8 @@
         </div>
 
         <div class="workshop-nav">
-            <button class="testimonial-nav-btn" onclick="prevBlog()"><i class="fas fa-chevron-left"></i></button>
-            <button class="testimonial-nav-btn" onclick="nextBlog()"><i class="fas fa-chevron-right"></i></button>
+            <button class="testimonial-nav-btn" onclick="prevCourse()"><i class="fas fa-chevron-left"></i></button>
+            <button class="testimonial-nav-btn" onclick="nextCourse()"><i class="fas fa-chevron-right"></i></button>
         </div>
         </section>
 
@@ -572,29 +527,24 @@ Tamil Nadu, India  – 620 021.<br></p>
 </html>
 
 <script>
-let testimonialIndex = 0;
+  let currentTestimonial = 0;
+  const track = document.getElementById('testimonial-track');
+  var testimonials = document.querySelectorAll('.testimonial');
 
-function updateTestimonialSlider() {
-  const cardWidth = document.querySelector('#testimonial-track blockquote')?.offsetWidth || 0;
-  document.getElementById('testimonial-track').style.transform = `translateX(-${testimonialIndex * cardWidth}px)`;
-}
+  function updateSlider() {
+    track.style.transform = `translateX(-${currentTestimonial * 100}%)`;
+  }
 
-function nextTestimonial() {
-  const total = document.querySelectorAll('#testimonial-track blockquote').length;
-  const max = total - 1;
-  if (testimonialIndex < max) testimonialIndex++;
-  updateTestimonialSlider();
-}
+  function nextTestimonial() {
+    currentTestimonial = (currentTestimonial + 1) % (testimonials.length-1);
+    updateSlider();
+  }
 
-function prevTestimonial() {
-  if (testimonialIndex > 0) testimonialIndex--;
-  updateTestimonialSlider();
-}
-
-window.addEventListener('resize', updateTestimonialSlider);
-window.addEventListener('load', updateTestimonialSlider);
+  function prevTestimonial() {
+    currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+    updateSlider();
+  }
 </script>
-
 <script>
   let workshopIndex = 0;
   const workshopTrack = document.getElementById('workshop-track');
@@ -622,22 +572,21 @@ window.addEventListener('load', updateTestimonialSlider);
 </script>
 <script>
 let blogIndex = 0;
+let testimonialIndex = 0;
 
-function getBlogCardsPerPage() {
-  return window.innerWidth < 768 ? 1 : 3;
-}
-
+// Dynamically get card width (safe for all devices)
 function updateBlogSlider() {
-  const cardsPerPage = getBlogCardsPerPage();
-  const cardWidth = document.querySelector('#blog-track .card')?.offsetWidth || 0;
-  const blogTrack = document.getElementById('blog-track');
-  blogTrack.style.transform = `translateX(-${blogIndex * cardWidth}px)`;
+  const track = document.getElementById("blog-track");
+  const card = track.querySelector(".card");
+  if (!card) return;
+  const cardWidth = card.offsetWidth;
+  track.style.transform = `translateX(-${blogIndex * cardWidth}px)`;
 }
 
 function nextBlog() {
-  const cardsPerPage = getBlogCardsPerPage();
-  const totalCards = document.querySelectorAll('#blog-track .card').length;
-  const maxIndex = Math.ceil(totalCards / cardsPerPage) - 1;
+  const cards = document.querySelectorAll("#blog-track .card");
+  const perPage = window.innerWidth < 768 ? 1 : 3;
+  const maxIndex = Math.ceil(cards.length / perPage) - 1;
   if (blogIndex < maxIndex) blogIndex++;
   updateBlogSlider();
 }
@@ -647,12 +596,34 @@ function prevBlog() {
   updateBlogSlider();
 }
 
-window.addEventListener('resize', () => {
-  updateBlogSlider();
-});
+// Testimonials
+function updateTestimonialSlider() {
+  const track = document.getElementById("testimonial-track");
+  const quote = track.querySelector("blockquote");
+  if (!quote) return;
+  const width = quote.offsetWidth;
+  track.style.transform = `translateX(-${testimonialIndex * width}px)`;
+}
 
-window.addEventListener('load', () => {
+function nextTestimonial() {
+  const quotes = document.querySelectorAll("#testimonial-track blockquote");
+  if (testimonialIndex < quotes.length - 1) testimonialIndex++;
+  updateTestimonialSlider();
+}
+
+function prevTestimonial() {
+  if (testimonialIndex > 0) testimonialIndex--;
+  updateTestimonialSlider();
+}
+
+// Update on load + resize
+window.addEventListener("load", () => {
   updateBlogSlider();
+  updateTestimonialSlider();
+});
+window.addEventListener("resize", () => {
+  updateBlogSlider();
+  updateTestimonialSlider();
 });
 </script>
 
